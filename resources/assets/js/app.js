@@ -9,11 +9,13 @@ require('./bootstrap');
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import SaleComponent from './components/SaleComponent';
 import FoodComponent from './components/FoodComponent';
 
 Vue.use(VueRouter);
 
 const routes = [
+    { path: '/sales', name: 'sales', component: SaleComponent },
     { path: '/foods', name:'foods', component: FoodComponent }
 ];
 

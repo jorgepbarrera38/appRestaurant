@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <a class="navbar-brand" href="#">Navbar</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -9,7 +9,7 @@
         <router-link class="nav-link" :to="{ name: 'foods' }"><span class="sr-only">(current)</span>Comidas</router-link>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Features</a>
+        <router-link class="nav-link" :to="{ name: 'sales' }"><span class="sr-only">(current)</span>Ventas</router-link>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">Pricing</a>
