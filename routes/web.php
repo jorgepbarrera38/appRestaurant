@@ -15,3 +15,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::resource('foods', 'FoodController');
+Route::resource('tables', 'TableController');

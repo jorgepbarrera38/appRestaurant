@@ -13,8 +13,5 @@
         <router-view></router-view>
     </div>
     <script src="{{ asset('js/app.js') }}"></script>
-    <script>
-        toastr.options.newestOnTop = true;
-    </script>
 </body>
 </html>
