@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 Route::resource('foods', 'FoodController');
 Route::resource('tables', 'TableController');
+Route::resource('sales', 'SaleController');

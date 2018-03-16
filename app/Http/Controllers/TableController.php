@@ -14,8 +14,8 @@ class TableController extends Controller
      */
     public function index()
     {
-        $tables = Table::all();
-        return $tables;
+        $tables = Table::with('foodtabletemps.food')->get();
+        return $tables;        
     }
 
     /**
@@ -37,7 +37,7 @@ class TableController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required'
+            'name' => 'required|unique:tables'
         ], [], [
             'name' => '"Nombre de la mesa"'
         ]);

@@ -12,12 +12,10 @@ class TablesTableSeeder extends Seeder
     public function run()
     {
         Table::create([
-            'name' => 'Mesa 1',
-            'state' => 'active'
+            'name' => 'Mesa 1'
         ]);
         Table::create([
-            'name' => 'Mesa 2',
-            'state' => 'active'
+            'name' => 'Mesa 2'
         ]);
     }
 }

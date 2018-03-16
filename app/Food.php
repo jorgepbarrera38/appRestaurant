@@ -9,4 +9,7 @@ class Food extends Model
     protected $fillable = [
         'name', 'description', 'price'
     ];
+    public function foodtabletemps(){
+        return $this->hasMany('App\Foodtabletemp');
+    }
 }
