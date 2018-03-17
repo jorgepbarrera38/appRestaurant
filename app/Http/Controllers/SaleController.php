@@ -5,9 +5,14 @@ use App\Foodtabletemp;
 
 use Illuminate\Http\Request;
 use App\Table;
+use App\Food;
 
 class SaleController extends Controller
 {
+    public function getfoods(Request $request){
+        $nameFind = $request['name'];
+        return Food::name($nameFind)->paginate(6);
+    }
     public function store(Request $request){
         $request->validate([
             'table' => 'required',
@@ -26,5 +31,13 @@ class SaleController extends Controller
             $table->state = true;
         }        
         $table->save();
+    }
+    public function pay(Request $request){
+        $foodsTempfromTable = Foodtabletemp::where('table_id', $request->input('tableId'))->with('food')->get();
+        $prices=0;
+        foreach ($foodsTempfromTable as $food) {
+            $prices += $food->food->price;
+        }
+        return $prices;
     }
 }

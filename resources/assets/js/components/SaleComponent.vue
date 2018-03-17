@@ -24,14 +24,16 @@
                     </div>
                     <div class="card-footer">
                         <button class="btn btn-default btn-sm" v-if="table.state" v-on:click="assignTable(table.id, index)">Asignar mesa</button>
-                        <button type="submit" class="btn btn-info btn-sm" v-if="!table.state" v-on:click="showModalFoods(table.id)">Agregar plato</button>
-                        <button type="submit" class="btn btn-success btn-sm" v-if="table.foodtabletemps.length>0">Pagar</button>
+                        <button type="button" class="btn btn-info btn-sm" v-if="!table.state" v-on:click="showModalFoods(table.id)">Agregar plato</button>
+                        <button type="button" class="btn btn-success btn-sm" v-if="table.foodtabletemps.length>0" v-on:click="pay(table.id)">Pagar</button>
+                        <!--<button class="btn btn-danger btn-sm" v-if="!table.state">Cancelar pedido</button>-->
                         <div class="float-right" v-if="table.foodtabletemps.length>0">
                             Total: ${{ calculateTotalTable(index) }}
                         </div>
                     </div>
                 </div><br>
             </div>
+            <!--Modal show foods-->
             <div class="modal fade" id="modalFoods" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
@@ -44,10 +46,11 @@
                     <div class="modal-body">
                         <form>
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Buscar">
+                                <input type="text" class="form-control" placeholder="Buscar" v-model="find" v-on:keyup="getFoods()">
                             </div>
                         </form>
-                            <table class="table table-hover table-sm">
+                            <div id="div2">
+                                <table class="table table-hover table-sm">
                                 <thead>
                                     <th>Nombre</th>
                                     <th>Descripción</th>
@@ -63,6 +66,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -70,6 +74,50 @@
                     </div>
                 </div>
             </div>
+            <!--End Modal show Foods-->
+            <!--Modal Pay-->
+            <!-- Modal -->
+            <div class="modal fade" id="modalPay" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Pagar cuenta</h5>
+                </div>
+                <div class="modal-body">
+                    <center>
+                        <div class="form-group">
+                            <label for="">Total a pagar</label>
+                            <h3 v-text="'$'+priceTotal"></h3>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Cantidad con que pagan</label>
+                            <form v-if="!payShowResult" v-on:submit.prevent="calculateTotal()">
+                                    <input type="text" class="form-control" placeholder="" v-model="priceWithPay">
+                            </form>
+                            <h3 v-if="payShowResult" v-text="'$'+priceWithPay"></h3>
+                        </div>
+                        <div class="form-group" v-if="payShowResult">
+                            <label for="">Devolver</label>
+                            <h3 v-text="'$'+priceBack"></h3>
+                        </div>
+
+                        <div class="form-check" v-if="confirmPay">
+                            <hr>
+                             <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                             <label class="form-check-label" for="defaultCheck1">
+                                Imprimir factura
+                            </label>
+                        </div>
+                    </center>
+                </div>
+                <div class="modal-footer" v-if="confirmPay">
+                    <button type="button" class="btn btn-danger" v-on:click="cancelPay()">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Confirmar pago</button>
+                </div>
+                </div>
+            </div>
+            </div>
+            <!--End Modal Pay-->
         </div>
     </div>
 </template>
@@ -86,6 +134,14 @@
                 foods:null,
 
                 tableNow:null,
+                priceTotal:null,
+
+                find:'',
+                payShowResult:false,
+                priceWithPay: null,
+                priceBack:null,
+
+                confirmPay:false
             }
         },
         methods: {
@@ -95,8 +151,8 @@
                 });
             },
             getFoods: function(){
-                axios.get('foods').then(response=>{
-                    this.foods = response.data;
+                axios.get('sales/getfoods?name='+this.find).then(response=>{
+                    this.foods = response.data.data;
                 });
             },
             assignTable: function(tableId, index){
@@ -124,6 +180,28 @@
                     total += Number(element.food.price);
                 });
                 return total;
+            },
+            pay: function(tableId){
+                axios.post('pay', {tableId:tableId}).then(response=>{
+                    this.priceTotal = response.data;
+                    $('#modalPay').modal({backdrop: 'static', keyboard: false})
+                });
+            },
+            cancelPay: function(){
+                this.payShowResult = false;
+                this.priceBack = null;
+                this.priceWithPay = null;
+                this.confirmPay = false;
+                $('#modalPay').modal('hide');
+            },
+            calculateTotal: function(){
+                if(this.priceWithPay < this.priceTotal){
+                    toastr.warning('El dinero no es suficiente para pagar la cuenta');
+                }else{
+                    this.priceBack = this.priceWithPay - this.priceTotal;
+                    this.payShowResult = true;
+                    this.confirmPay = true;
+                }
             }
         },
         filters: {
@@ -137,13 +215,13 @@
     }
 </script>
 <style>
-       .modal-body {
-    min-height:440px; 
-    overflow-y: auto;
-       }
        #div1 {
-    overflow-y:scroll;
-    height:100px;
-}
+            overflow-y:scroll;
+            height:100px;
+        }
+        #div2 {
+            overflow-y: scroll;
+            height: 300px;
+        }
 </style>
 

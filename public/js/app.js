@@ -50711,7 +50711,7 @@ exports = module.exports = __webpack_require__(49)(false);
 
 
 // module
-exports.push([module.i, "\n.modal-body {\n    min-height:440px; \n    overflow-y: auto;\n}\n#div1 {\n    overflow-y:scroll;\n    height:100px;\n}\n", ""]);
+exports.push([module.i, "\n#div1 {\n     overflow-y:scroll;\n     height:100px;\n}\n#div2 {\n     overflow-y: scroll;\n     height: 300px;\n}\n", ""]);
 
 // exports
 
@@ -51142,6 +51142,54 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -51154,7 +51202,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             tables: null,
             foods: null,
 
-            tableNow: null
+            tableNow: null,
+            priceTotal: null,
+
+            find: '',
+            payShowResult: false,
+            priceWithPay: null,
+            priceBack: null,
+
+            confirmPay: false
         };
     },
 
@@ -51169,8 +51225,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getFoods: function getFoods() {
             var _this2 = this;
 
-            axios.get('foods').then(function (response) {
-                _this2.foods = response.data;
+            axios.get('sales/getfoods?name=' + this.find).then(function (response) {
+                _this2.foods = response.data.data;
             });
         },
         assignTable: function assignTable(tableId, index) {
@@ -51202,6 +51258,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 total += Number(element.food.price);
             });
             return total;
+        },
+        pay: function pay(tableId) {
+            var _this5 = this;
+
+            axios.post('pay', { tableId: tableId }).then(function (response) {
+                _this5.priceTotal = response.data;
+                $('#modalPay').modal({ backdrop: 'static', keyboard: false });
+            });
+        },
+        cancelPay: function cancelPay() {
+            this.payShowResult = false;
+            this.priceBack = null;
+            this.priceWithPay = null;
+            this.confirmPay = false;
+            $('#modalPay').modal('hide');
+        },
+        calculateTotal: function calculateTotal() {
+            if (this.priceWithPay < this.priceTotal) {
+                __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.warning('El dinero no es suficiente para pagar la cuenta');
+            } else {
+                this.priceBack = this.priceWithPay - this.priceTotal;
+                this.payShowResult = true;
+                this.confirmPay = true;
+            }
         }
     },
     filters: {
@@ -51317,7 +51397,7 @@ var render = function() {
                         "button",
                         {
                           staticClass: "btn btn-info btn-sm",
-                          attrs: { type: "submit" },
+                          attrs: { type: "button" },
                           on: {
                             click: function($event) {
                               _vm.showModalFoods(table.id)
@@ -51333,7 +51413,12 @@ var render = function() {
                         "button",
                         {
                           staticClass: "btn btn-success btn-sm",
-                          attrs: { type: "submit" }
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              _vm.pay(table.id)
+                            }
+                          }
                         },
                         [_vm._v("Pagar")]
                       )
@@ -51379,42 +51464,241 @@ var render = function() {
                   _vm._m(0),
                   _vm._v(" "),
                   _c("div", { staticClass: "modal-body" }, [
-                    _vm._m(1),
-                    _vm._v(" "),
-                    _c("table", { staticClass: "table table-hover table-sm" }, [
-                      _vm._m(2),
-                      _vm._v(" "),
-                      _c(
-                        "tbody",
-                        _vm._l(_vm.foods, function(food) {
-                          return _c("tr", [
-                            _c("td", [_vm._v(_vm._s(food.name))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(food.description))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(food.price))]),
-                            _vm._v(" "),
-                            _c("td", [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-success btn-sm",
-                                  on: {
-                                    click: function($event) {
-                                      _vm.addFoodTable(food.id)
-                                    }
-                                  }
-                                },
-                                [_vm._v("Añadir")]
-                              )
-                            ])
-                          ])
+                    _c("form", [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.find,
+                              expression: "find"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "text", placeholder: "Buscar" },
+                          domProps: { value: _vm.find },
+                          on: {
+                            keyup: function($event) {
+                              _vm.getFoods()
+                            },
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.find = $event.target.value
+                            }
+                          }
                         })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { attrs: { id: "div2" } }, [
+                      _c(
+                        "table",
+                        { staticClass: "table table-hover table-sm" },
+                        [
+                          _vm._m(1),
+                          _vm._v(" "),
+                          _c(
+                            "tbody",
+                            _vm._l(_vm.foods, function(food) {
+                              return _c("tr", [
+                                _c("td", [_vm._v(_vm._s(food.name))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(food.description))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(food.price))]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-success btn-sm",
+                                      on: {
+                                        click: function($event) {
+                                          _vm.addFoodTable(food.id)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Añadir")]
+                                  )
+                                ])
+                              ])
+                            })
+                          )
+                        ]
                       )
                     ])
                   ]),
                   _vm._v(" "),
-                  _vm._m(3)
+                  _vm._m(2)
+                ])
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "modal fade",
+            attrs: {
+              id: "modalPay",
+              tabindex: "-1",
+              role: "dialog",
+              "aria-labelledby": "exampleModalLabel",
+              "aria-hidden": "true"
+            }
+          },
+          [
+            _c(
+              "div",
+              { staticClass: "modal-dialog", attrs: { role: "document" } },
+              [
+                _c("div", { staticClass: "modal-content" }, [
+                  _vm._m(3),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "modal-body" },
+                    [
+                      _c("center", [
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("label", { attrs: { for: "" } }, [
+                            _vm._v("Total a pagar")
+                          ]),
+                          _vm._v(" "),
+                          _c("h3", {
+                            domProps: {
+                              textContent: _vm._s("$" + _vm.priceTotal)
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("label", { attrs: { for: "" } }, [
+                            _vm._v("Cantidad con que pagan")
+                          ]),
+                          _vm._v(" "),
+                          !_vm.payShowResult
+                            ? _c(
+                                "form",
+                                {
+                                  on: {
+                                    submit: function($event) {
+                                      $event.preventDefault()
+                                      _vm.calculateTotal()
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.priceWithPay,
+                                        expression: "priceWithPay"
+                                      }
+                                    ],
+                                    staticClass: "form-control",
+                                    attrs: { type: "text", placeholder: "" },
+                                    domProps: { value: _vm.priceWithPay },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.priceWithPay = $event.target.value
+                                      }
+                                    }
+                                  })
+                                ]
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm.payShowResult
+                            ? _c("h3", {
+                                domProps: {
+                                  textContent: _vm._s("$" + _vm.priceWithPay)
+                                }
+                              })
+                            : _vm._e()
+                        ]),
+                        _vm._v(" "),
+                        _vm.payShowResult
+                          ? _c("div", { staticClass: "form-group" }, [
+                              _c("label", { attrs: { for: "" } }, [
+                                _vm._v("Devolver")
+                              ]),
+                              _vm._v(" "),
+                              _c("h3", {
+                                domProps: {
+                                  textContent: _vm._s("$" + _vm.priceBack)
+                                }
+                              })
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.confirmPay
+                          ? _c("div", { staticClass: "form-check" }, [
+                              _c("hr"),
+                              _vm._v(" "),
+                              _c("input", {
+                                staticClass: "form-check-input",
+                                attrs: {
+                                  type: "checkbox",
+                                  value: "",
+                                  id: "defaultCheck1"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "label",
+                                {
+                                  staticClass: "form-check-label",
+                                  attrs: { for: "defaultCheck1" }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            Imprimir factura\n                        "
+                                  )
+                                ]
+                              )
+                            ])
+                          : _vm._e()
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _vm.confirmPay
+                    ? _c("div", { staticClass: "modal-footer" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                _vm.cancelPay()
+                              }
+                            }
+                          },
+                          [_vm._v("Cancelar")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            attrs: { type: "button" }
+                          },
+                          [_vm._v("Confirmar pago")]
+                        )
+                      ])
+                    : _vm._e()
                 ])
               ]
             )
@@ -51455,19 +51739,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("form", [
-      _c("div", { staticClass: "form-group" }, [
-        _c("input", {
-          staticClass: "form-control",
-          attrs: { type: "text", placeholder: "Buscar" }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("thead", [
       _c("th", [_vm._v("Nombre")]),
       _vm._v(" "),
@@ -51490,6 +51761,18 @@ var staticRenderFns = [
           attrs: { type: "button", "data-dismiss": "modal" }
         },
         [_vm._v("Cerrar")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
+        [_vm._v("Pagar cuenta")]
       )
     ])
   }

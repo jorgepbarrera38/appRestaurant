@@ -12,4 +12,9 @@ class Food extends Model
     public function foodtabletemps(){
         return $this->hasMany('App\Foodtabletemp');
     }
+    public function scopeName($query, $name){
+        if($name){
+            $query->where('name', 'LIKE', '%'.$name.'%');
+        }
+    }
 }

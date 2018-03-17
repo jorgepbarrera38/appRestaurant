@@ -16,4 +16,7 @@ Route::get('/', function () {
 });
 Route::resource('foods', 'FoodController');
 Route::resource('tables', 'TableController');
+
+Route::get('sales/getfoods', 'SaleController@getfoods');
 Route::resource('sales', 'SaleController');
+Route::post('pay', 'SaleController@pay');

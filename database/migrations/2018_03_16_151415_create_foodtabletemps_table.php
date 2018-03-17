@@ -19,7 +19,6 @@ class CreateFoodtabletempsTable extends Migration
             $table->foreign('food_id')->references('id')->on('foods');
             $table->integer('table_id')->unsigned();
             $table->foreign('table_id')->references('id')->on('tables');
-            $table->string('quantity')->default(1);
             $table->timestamps();
         });
     }
