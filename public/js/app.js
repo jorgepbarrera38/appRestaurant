@@ -51190,6 +51190,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -51368,7 +51372,9 @@ var render = function() {
                           return _c("tr", [
                             _c("td", [_vm._v(_vm._s(foodTemp.food.name))]),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(foodTemp.food.price))])
+                            _c("td", [
+                              _vm._v("$" + _vm._s(foodTemp.food.price))
+                            ])
                           ])
                         })
                       )
@@ -51603,7 +51609,7 @@ var render = function() {
                                       }
                                     ],
                                     staticClass: "form-control",
-                                    attrs: { type: "text", placeholder: "" },
+                                    attrs: { type: "number", placeholder: "" },
                                     domProps: { value: _vm.priceWithPay },
                                     on: {
                                       input: function($event) {

@@ -4,6 +4,7 @@
             <div class="col-md-12">
                 <button class="btn btn-success btn-sm" v-on:click="getTables(); showSuccess()">Actualizar</button>
             </div><br><br>
+            <!--Listado de mesas-->
             <div class="col-md-4" v-for="(table, index) in tables">
                 <div class="card" style="height: 13rem;">
                     <div class="card-header">
@@ -14,12 +15,14 @@
                     </div>
                     <div class="card-body" style="padding:4px">
                         <div id="div1">
+                            <!--Listado de comidas para la mesa actual-->
                             <table class="table table-sm" style="font-size:12px">
                                 <tr v-for="foodTemp in table.foodtabletemps">
                                     <td>{{ foodTemp.food.name }}</td>
-                                    <td>{{ foodTemp.food.price }}</td>
+                                    <td>${{ foodTemp.food.price }}</td>
                                 </tr>
                             </table>
+                            <!--Fin Listado de comidas para la mesa actual-->
                         </div>
                     </div>
                     <div class="card-footer">
@@ -33,6 +36,7 @@
                     </div>
                 </div><br>
             </div>
+            <!--Fin Listado de mesas-->
             <!--Modal show foods-->
             <div class="modal fade" id="modalFoods" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -92,7 +96,7 @@
                         <div class="form-group">
                             <label for="">Cantidad con que pagan</label>
                             <form v-if="!payShowResult" v-on:submit.prevent="calculateTotal()">
-                                    <input type="text" class="form-control" placeholder="" v-model="priceWithPay">
+                                    <input type="number" class="form-control" placeholder="" v-model="priceWithPay">
                             </form>
                             <h3 v-if="payShowResult" v-text="'$'+priceWithPay"></h3>
                         </div>
