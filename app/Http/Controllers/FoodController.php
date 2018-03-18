@@ -8,7 +8,8 @@ use App\Food;
 class FoodController extends Controller
 {
     public function index(){
-        $foods = Food::orderBy('id', 'desc')->get();
+        $findName = request('name');
+        $foods = Food::name($findName)->orderBy('id', 'desc')->paginate(9);
         return $foods;
     }
     public function show($id){
@@ -17,24 +18,24 @@ class FoodController extends Controller
     }
     public function store(Request $request){
         $foodData = $request->validate([
-            'name' => 'required',
-            'description' => 'required',
+            'name' => 'required|max:50',
+            'description' => 'required|max:150',
             'price' => 'required|numeric'
         ], [], [
             'name' => 'Nombre',
-            'Descripción',
+            'description' => 'Descripción',
             'price' => 'Precio'
         ]);
         Food::create($foodData);
     }
     public function update(Request $request, $id){
         $food = $request->validate([
-            'name' => 'required',
-            'description' => 'required',
+            'name' => 'required|max:50',
+            'description' => 'required|max:150',
             'price' => 'required|numeric'
         ], [], [
             'name' => 'Nombre',
-            'Descripción',
+            'description' => 'Descripción',
             'price' => 'Precio'
         ]);
         Food::findOrFail($id)->update($food);

@@ -14444,7 +14444,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(14);
-module.exports = __webpack_require__(57);
+module.exports = __webpack_require__(59);
 
 
 /***/ }),
@@ -14460,7 +14460,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_TableComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_TableComponent__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_SaleComponent__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_SaleComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_SaleComponent__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_FoodComponent__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_FoodComponent__ = __webpack_require__(56);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_FoodComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_FoodComponent__);
 
 /**
@@ -50638,7 +50638,7 @@ var normalizeComponent = __webpack_require__(4)
 /* script */
 var __vue_script__ = __webpack_require__(52)
 /* template */
-var __vue_template__ = __webpack_require__(53)
+var __vue_template__ = __webpack_require__(55)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -51067,6 +51067,8 @@ module.exports = function listToStyles (parentId, list) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_toastr__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_toastr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_format_num__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_format_num___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_format_num__);
 //
 //
 //
@@ -51194,6 +51196,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -51224,6 +51228,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.get('tables').then(function (response) {
                 _this.tables = response.data;
+            }).catch(function (errors) {
+                __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.warning('Ha ocurrido un error, actualiza por favor');
             });
         },
         getFoods: function getFoods() {
@@ -51238,6 +51244,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.put('sales/' + tableId, { name: 'Alexis' }).then(function (response) {
                 _this3.tables[index].state = !_this3.tables[index].state;
+            }).catch(function (errors) {
+                __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.warning('Ha ocurrido un error, actualiza por favor');
             });
         },
         showModalFoods: function showModalFoods(tableId) {
@@ -51251,6 +51259,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.success('Comida añadida');
             axios.post('sales', data).then(function (response) {
                 _this4.getTables();
+            }).catch(function (errors) {
+                __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.warning('Ha ocurrido un error, actualiza por favor');
+            });
+        },
+        deleteFoodFromTable: function deleteFoodFromTable(foodId, index) {
+            var _this5 = this;
+
+            axios.delete('sales/' + foodId).then(function (response) {
+                __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.success('Comida eliminada de la mesa');
+                _this5.getTables();
+            }).catch(function (errors) {
+                __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.warning('Ha ocurrido un error, actualiza por favor');
             });
         },
         showSuccess: function showSuccess() {
@@ -51261,14 +51281,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.tables[index].foodtabletemps.forEach(function (element) {
                 total += Number(element.food.price);
             });
-            return total;
+            return this.convertToMoney(total);
         },
         pay: function pay(tableId) {
-            var _this5 = this;
+            var _this6 = this;
 
             axios.post('pay', { tableId: tableId }).then(function (response) {
-                _this5.priceTotal = response.data;
+                _this6.priceTotal = response.data;
+                _this6.tableNow = tableId;
                 $('#modalPay').modal({ backdrop: 'static', keyboard: false });
+            }).catch(function (errors) {
+                __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.warning('Ha ocurrido un error, actualiza por favor');
             });
         },
         cancelPay: function cancelPay() {
@@ -51278,6 +51301,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.confirmPay = false;
             $('#modalPay').modal('hide');
         },
+        payNow: function payNow() {
+            var _this7 = this;
+
+            axios.post('sales/paynow', { tableId: this.tableNow }).then(function (response) {
+                $('#modalPay').modal('hide');
+                __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.success('Cuenta pagada con éxito');
+                _this7.payShowResult = false;
+                _this7.priceBack = null;
+                _this7.priceWithPay = null;
+                _this7.confirmPay = false;
+                _this7.getTables();
+            });
+        },
         calculateTotal: function calculateTotal() {
             if (this.priceWithPay < this.priceTotal) {
                 __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.warning('El dinero no es suficiente para pagar la cuenta');
@@ -51286,6 +51322,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.payShowResult = true;
                 this.confirmPay = true;
             }
+        },
+        convertToMoney: function convertToMoney(price) {
+            return __WEBPACK_IMPORTED_MODULE_1_format_num___default()(price);
         }
     },
     filters: {
@@ -51302,6 +51341,105 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
+const parseNum = __webpack_require__(54)
+
+/* global Intl */
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
+const defaultOptions = {
+  nanZero: true,
+  locale: 'en-US',
+  localeMatcher: 'best fit',
+  useGrouping: true, // grouping separator determined by locale
+  maximumFractionDigits: 15
+  // OTHER
+  // minimumIntegerDigits
+  // minimumFractionDigits
+  // maximumFractionDigits
+  // minimumSignificantDigits
+  // maximumSignificantDigits
+}
+
+function formatNum (number, opts) {
+  opts = renameKeyShortcuts(Object.assign({}, defaultOptions, opts))
+  number = parseNum(number)
+
+  if (isNaN(number)) {
+    if (opts.nanZero === false) return 'NaN'
+    else number = 0
+  }
+
+  const nf = new Intl.NumberFormat([opts.locale], Object.assign({}, opts, { style: 'decimal' }))
+  return nf.format(number)
+}
+
+function renameKeyShortcuts (opts) {
+  // expand 'min' to 'minimum', 'max' to 'maximum'
+  Object.keys(opts).forEach(function (key) {
+    if (!key.includes('minimum') && key.startsWith('min')) {
+      opts[key.replace('min', 'minimum')] = opts[key]
+      delete opts[key]
+    }
+
+    if (!key.includes('maximum') && key.startsWith('max')) {
+      opts[key.replace('max', 'maximum')] = opts[key]
+      delete opts[key]
+    }
+  })
+
+  Object.keys(opts).forEach(function (key) {
+    if (key.startsWith('minimum') && !key.endsWith('Digits')) {
+      opts[key + 'Digits'] = opts[key]
+      delete opts[key]
+    }
+
+    if (key.startsWith('maximum') && !key.endsWith('Digits')) {
+      opts[key + 'Digits'] = opts[key]
+      delete opts[key]
+    }
+  })
+
+  return opts
+}
+
+module.exports = formatNum
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// modified from accounting.js
+function parseNum (value, decimalSep) {
+  if (value == null) return NaN
+  decimalSep = decimalSep || '.'
+
+  // Return the value as-is if it's already a number:
+  if (typeof value === 'number') return value
+
+  // build regex to strip out everything except digits, decimal point and minus sign:
+  var regex = new RegExp('[^0-9-' + decimalSep + ']', ['g'])
+  var unformatted = value.toString() // explicitly convert to string
+  unformatted = unformatted
+    // .replace(/\((.*)\)/, '-$1') // replace bracketed values with negatives
+		.replace(regex, '')         // strip out any cruft
+    .replace(decimalSep, '.')   // make sure decimal point is standard
+
+  unformatted = parseFloat(unformatted)
+
+  return unformatted
+}
+
+module.exports = parseNum
+
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
@@ -51315,7 +51453,7 @@ var render = function() {
           _c(
             "button",
             {
-              staticClass: "btn btn-success btn-sm",
+              staticClass: "btn btn-primary btn-sm",
               on: {
                 click: function($event) {
                   _vm.getTables()
@@ -51330,7 +51468,7 @@ var render = function() {
         _c("br"),
         _vm._v(" "),
         _vm._l(_vm.tables, function(table, index) {
-          return _c("div", { staticClass: "col-md-4" }, [
+          return _c("div", { staticClass: "col-lg-4 col-md-6 col-sm-12" }, [
             _c(
               "div",
               { staticClass: "card", staticStyle: { height: "13rem" } },
@@ -51368,12 +51506,32 @@ var render = function() {
                           staticClass: "table table-sm",
                           staticStyle: { "font-size": "12px" }
                         },
-                        _vm._l(table.foodtabletemps, function(foodTemp) {
+                        _vm._l(table.foodtabletemps, function(foodTemp, index) {
                           return _c("tr", [
                             _c("td", [_vm._v(_vm._s(foodTemp.food.name))]),
                             _vm._v(" "),
                             _c("td", [
-                              _vm._v("$" + _vm._s(foodTemp.food.price))
+                              _vm._v(
+                                "$" +
+                                  _vm._s(
+                                    _vm.convertToMoney(foodTemp.food.price)
+                                  )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn  btn-sm",
+                                  on: {
+                                    click: function($event) {
+                                      _vm.deleteFoodFromTable(foodTemp.id)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Quitar")]
+                              )
                             ])
                           ])
                         })
@@ -51433,7 +51591,7 @@ var render = function() {
                   table.foodtabletemps.length > 0
                     ? _c("div", { staticClass: "float-right" }, [
                         _vm._v(
-                          "\n                        Total: $" +
+                          "\n                        $" +
                             _vm._s(_vm.calculateTotalTable(index)) +
                             "\n                    "
                         )
@@ -51470,33 +51628,31 @@ var render = function() {
                   _vm._m(0),
                   _vm._v(" "),
                   _c("div", { staticClass: "modal-body" }, [
-                    _c("form", [
-                      _c("div", { staticClass: "form-group" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.find,
-                              expression: "find"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { type: "text", placeholder: "Buscar" },
-                          domProps: { value: _vm.find },
-                          on: {
-                            keyup: function($event) {
-                              _vm.getFoods()
-                            },
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.find = $event.target.value
-                            }
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.find,
+                            expression: "find"
                           }
-                        })
-                      ])
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", placeholder: "Buscar" },
+                        domProps: { value: _vm.find },
+                        on: {
+                          keyup: function($event) {
+                            _vm.getFoods()
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.find = $event.target.value
+                          }
+                        }
+                      })
                     ]),
                     _vm._v(" "),
                     _c("div", { attrs: { id: "div2" } }, [
@@ -51577,7 +51733,9 @@ var render = function() {
                           _vm._v(" "),
                           _c("h3", {
                             domProps: {
-                              textContent: _vm._s("$" + _vm.priceTotal)
+                              textContent: _vm._s(
+                                "$" + _vm.convertToMoney(_vm.priceTotal)
+                              )
                             }
                           })
                         ]),
@@ -51627,7 +51785,9 @@ var render = function() {
                           _vm.payShowResult
                             ? _c("h3", {
                                 domProps: {
-                                  textContent: _vm._s("$" + _vm.priceWithPay)
+                                  textContent: _vm._s(
+                                    "$" + _vm.convertToMoney(_vm.priceWithPay)
+                                  )
                                 }
                               })
                             : _vm._e()
@@ -51641,7 +51801,9 @@ var render = function() {
                               _vm._v(" "),
                               _c("h3", {
                                 domProps: {
-                                  textContent: _vm._s("$" + _vm.priceBack)
+                                  textContent: _vm._s(
+                                    "$" + _vm.convertToMoney(_vm.priceBack)
+                                  )
                                 }
                               })
                             ])
@@ -51679,32 +51841,37 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _vm.confirmPay
-                    ? _c("div", { staticClass: "modal-footer" }, [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-danger",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function($event) {
-                                _vm.cancelPay()
-                              }
-                            }
-                          },
-                          [_vm._v("Cancelar")]
-                        ),
-                        _vm._v(" "),
-                        _c(
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.cancelPay()
+                          }
+                        }
+                      },
+                      [_vm._v("Cancelar")]
+                    ),
+                    _vm._v(" "),
+                    _vm.confirmPay
+                      ? _c(
                           "button",
                           {
                             staticClass: "btn btn-primary",
-                            attrs: { type: "button" }
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                _vm.payNow()
+                              }
+                            }
                           },
                           [_vm._v("Confirmar pago")]
                         )
-                      ])
-                    : _vm._e()
+                      : _vm._e()
+                  ])
                 ])
               ]
             )
@@ -51793,15 +51960,15 @@ if (false) {
 }
 
 /***/ }),
-/* 54 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(4)
 /* script */
-var __vue_script__ = __webpack_require__(55)
+var __vue_script__ = __webpack_require__(57)
 /* template */
-var __vue_template__ = __webpack_require__(56)
+var __vue_template__ = __webpack_require__(58)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -51840,13 +52007,35 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 55 */
+/* 57 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_toastr__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_toastr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_format_num__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_format_num___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_format_num__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -51919,14 +52108,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 
-__WEBPACK_IMPORTED_MODULE_0_toastr___default.a.options.timeOut = 2000;
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mounted: function mounted() {
+    created: function created() {
         this.getFoods();
     },
     data: function data() {
         return {
-            foods: null,
+            foods: [],
             food: {
                 id: '',
                 name: '',
@@ -51934,7 +52123,11 @@ __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.options.timeOut = 2000;
                 price: ''
             },
             errors: null,
-            editFoodModal: false
+            editFoodModal: false,
+            currentPage: 1,
+            lastPage: 1,
+            findTemp: '',
+            find: ''
         };
     },
 
@@ -51942,9 +52135,16 @@ __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.options.timeOut = 2000;
         getFoods: function getFoods() {
             var _this = this;
 
-            axios.get('foods').then(function (response) {
-                _this.foods = response.data;
-            });
+            var nextPage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+            var page = nextPage;
+            if (page <= this.lastPage) {
+                axios.get('foods?page=' + page + '&name=' + this.find).then(function (response) {
+                    _this.foods = response.data.data;
+                    _this.currentPage = response.data.current_page;
+                    _this.lastPage = response.data.last_page;
+                });
+            }
         },
         newFood: function newFood() {
             if (this.editFoodModal) {
@@ -52009,12 +52209,25 @@ __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.options.timeOut = 2000;
             this.food.name = '';
             this.food.description = '';
             this.food.price = '';
+        },
+        convertMoney: function convertMoney(price) {
+            return __WEBPACK_IMPORTED_MODULE_1_format_num___default()(price);
+        },
+        buttonBackIsActive: function buttonBackIsActive() {
+            return this.currentPage > 1 ? '' : 'disabled';
+        },
+        buttonUpIsActive: function buttonUpIsActive() {
+            return this.currentPage === this.lastPage ? 'disabled' : '';
+        },
+        addFind: function addFind() {
+            this.find = this.findTemp;
+            this.getFoods();
         }
     }
 });
 
 /***/ }),
-/* 56 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -52026,26 +52239,115 @@ var render = function() {
       _c("div", { staticClass: "col-md-12" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header" }, [
-            _vm._v("\n                    Listado de comidas "),
-            _c(
-              "a",
-              {
-                staticClass: "btn btn-primary btn-sm float-right",
-                attrs: { href: "" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    _vm.newFood()
+            _vm._v(
+              "\n                    Listado de comidas \n                    "
+            ),
+            _c("div", { staticClass: "float-right" }, [
+              _vm._v(
+                "\n                        Página " +
+                  _vm._s(_vm.currentPage) +
+                  " de " +
+                  _vm._s(_vm.lastPage) +
+                  " "
+              ),
+              _c("span", { staticClass: "glyphicon glyphicon-search" }, [
+                _vm._v("sdf")
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary btn-sm",
+                  class: _vm.buttonBackIsActive(),
+                  on: {
+                    click: function($event) {
+                      _vm.getFoods(_vm.currentPage - 1)
+                    }
                   }
-                }
-              },
-              [_vm._v("Nuevo")]
-            )
+                },
+                [_vm._v("Atrás")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary btn-sm",
+                  class: _vm.buttonUpIsActive(),
+                  on: {
+                    click: function($event) {
+                      _vm.getFoods(_vm.currentPage + 1)
+                    }
+                  }
+                },
+                [_vm._v("Adelante")]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "btn btn-primary btn-sm",
+                  attrs: { href: "" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.newFood()
+                    }
+                  }
+                },
+                [_vm._v("Nuevo")]
+              )
+            ])
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
+            _c(
+              "form",
+              {
+                staticClass: "form-inline",
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    _vm.addFind()
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "form-row align-items-center" }, [
+                  _c("div", { staticClass: "col-auto" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.findTemp,
+                          expression: "findTemp"
+                        }
+                      ],
+                      staticClass: "form-control mb-2",
+                      attrs: {
+                        type: "text",
+                        id: "inlineFormInput",
+                        placeholder: "Buscar coincidencias"
+                      },
+                      domProps: { value: _vm.findTemp },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.findTemp = $event.target.value
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(0)
+              ]
+            ),
+            _vm._v(" "),
             _c("table", { staticClass: "table table-hover table-sm" }, [
-              _vm._m(0),
+              _vm._m(1),
               _vm._v(" "),
               _c(
                 "tbody",
@@ -52057,7 +52359,9 @@ var render = function() {
                       _vm._v(_vm._s(food.description.substring(0, 60)))
                     ]),
                     _vm._v(" "),
-                    _c("td", [_vm._v("$" + _vm._s(food.price))]),
+                    _c("td", [
+                      _vm._v("$" + _vm._s(_vm.convertMoney(food.price)))
+                    ]),
                     _vm._v(" "),
                     _c("td", [
                       _c("button", { staticClass: "btn btn-info btn-sm" }, [
@@ -52133,7 +52437,7 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _vm._m(1)
+                _vm._m(2)
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
@@ -52147,86 +52451,117 @@ var render = function() {
                     )
                   : _vm._e(),
                 _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "" } }, [_vm._v("Nombre")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.food.name,
-                        expression: "food.name"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "text", placeholder: "Nombre de la comida" },
-                    domProps: { value: _vm.food.name },
+                _c(
+                  "form",
+                  {
                     on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.food, "name", $event.target.value)
+                      submit: function($event) {
+                        $event.preventDefault()
+                        _vm.editFoodModal
+                          ? _vm.updateFood(_vm.food.id)
+                          : _vm.saveFood()
                       }
                     }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "" } }, [_vm._v("Descripción")]),
-                  _vm._v(" "),
-                  _c("textarea", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.food.description,
-                        expression: "food.description"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      rows: "2",
-                      placeholder: "Descripción de la comida"
-                    },
-                    domProps: { value: _vm.food.description },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                  },
+                  [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "" } }, [_vm._v("Nombre")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.food.name,
+                            expression: "food.name"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          placeholder: "Nombre de la comida",
+                          maxlength: "50"
+                        },
+                        domProps: { value: _vm.food.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.food, "name", $event.target.value)
+                          }
                         }
-                        _vm.$set(_vm.food, "description", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "" } }, [_vm._v("Price")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.food.price,
-                        expression: "food.price"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "number" },
-                    domProps: { value: _vm.food.price },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "" } }, [
+                        _vm._v("Descripción")
+                      ]),
+                      _vm._v(" "),
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.food.description,
+                            expression: "food.description"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          rows: "2",
+                          placeholder: "Descripción de la comida",
+                          maxlength: "150"
+                        },
+                        domProps: { value: _vm.food.description },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.food,
+                              "description",
+                              $event.target.value
+                            )
+                          }
                         }
-                        _vm.$set(_vm.food, "price", $event.target.value)
-                      }
-                    }
-                  })
-                ])
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "" } }, [_vm._v("Price")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.food.price,
+                            expression: "food.price"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "number" },
+                        domProps: { value: _vm.food.price },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.food, "price", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("button", {
+                      staticStyle: { display: "none" },
+                      attrs: { type: "submit" }
+                    })
+                  ]
+                )
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-footer" }, [
@@ -52272,6 +52607,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-auto" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary mb-2", attrs: { type: "submit" } },
+        [_vm._v("Buscar")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("thead", [
       _c("th", [_vm._v("Nombre")]),
       _vm._v(" "),
@@ -52310,7 +52657,7 @@ if (false) {
 }
 
 /***/ }),
-/* 57 */
+/* 59 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

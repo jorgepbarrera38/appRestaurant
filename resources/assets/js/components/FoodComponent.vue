@@ -4,9 +4,26 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        Listado de comidas <a href="" class="btn btn-primary btn-sm float-right" v-on:click.prevent="newFood()">Nuevo</a>
+                        Listado de comidas 
+                        <div class="float-right">
+                            Página {{ currentPage }} de {{ lastPage }} <span class="glyphicon glyphicon-search">sdf</span>
+                            <button class="btn btn-primary btn-sm" v-bind:class="buttonBackIsActive()" v-on:click="getFoods(currentPage-1)">Atrás</button>
+                            <button class="btn btn-primary btn-sm" v-bind:class="buttonUpIsActive()" v-on:click="getFoods(currentPage+1)">Adelante</button>
+
+                            <a href="" class="btn btn-primary btn-sm" v-on:click.prevent="newFood()">Nuevo</a>
+                        </div>
                     </div>
                     <div class="card-body">
+                        <form class="form-inline" v-on:submit.prevent="addFind()">
+                             <div class="form-row align-items-center">
+                                <div class="col-auto">
+                                    <input type="text" class="form-control mb-2" id="inlineFormInput" placeholder="Buscar coincidencias" v-model="findTemp">
+                                </div>
+                             </div>
+                             <div class="col-auto">
+                                <button type="submit" class="btn btn-primary mb-2">Buscar</button>
+                            </div>
+                        </form>
                         <table class="table table-hover table-sm">
                             <thead>
                                 <th>Nombre</th>
@@ -18,7 +35,7 @@
                                 <tr v-for="food in foods">
                                     <td>{{ food.name }}</td>
                                     <td>{{ food.description.substring(0, 60) }}</td>
-                                    <td>${{ food.price }}</td>
+                                    <td>${{ convertMoney(food.price) }}</td>
                                     <td>
                                         <button class="btn btn-info btn-sm">Ver</button>
                                         <button class="btn btn-warning btn-sm" v-on:click="editFood(food.id)">Editar</button>
@@ -31,53 +48,56 @@
                 </div>
             </div>
         </div>
-        <!--MODAL-->
-        <!-- Modal -->
+        <!-- Modal create Food -->
         <div class="modal fade" id="newFoodModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">{{ editFoodModal ? 'Editar comida' : 'Nueva comida' }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-danger" v-if="errors">
-                    <li v-for="error in errors">{{ error[0] }}</li>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{ editFoodModal ? 'Editar comida' : 'Nueva comida' }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label for="">Nombre</label>
-                    <input type="text" class="form-control" placeholder="Nombre de la comida" v-model="food.name">
+                <div class="modal-body">
+                    <div class="alert alert-danger" v-if="errors">
+                        <li v-for="error in errors">{{ error[0] }}</li>
+                    </div>
+                    <form v-on:submit.prevent="editFoodModal ? updateFood(food.id) : saveFood()">
+                        <div class="form-group">
+                            <label for="">Nombre</label>
+                            <input type="text" class="form-control" placeholder="Nombre de la comida" v-model="food.name" maxlength="50">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Descripción</label>
+                            <textarea rows="2" v-model="food.description" placeholder="Descripción de la comida" class="form-control" maxlength="150"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Price</label>
+                            <input type="number" class="form-control" v-model="food.price">
+                        </div>
+                        <button type="submit" style="display:none"></button>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label for="">Descripción</label>
-                    <textarea rows="2" v-model="food.description" placeholder="Descripción de la comida" class="form-control"></textarea>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" v-on:click="cancelNewFood()">Cancelar</button>
+                    <button type="button" class="btn btn-primary" v-on:click="editFoodModal ? updateFood(food.id) : saveFood()">Guardar</button>
                 </div>
-                <div class="form-group">
-                    <label for="">Price</label>
-                    <input type="number" class="form-control" v-model="food.price">
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" v-on:click="cancelNewFood()">Cancelar</button>
-                <button type="button" class="btn btn-primary" v-on:click="editFoodModal ? updateFood(food.id) : saveFood()">Guardar</button>
-            </div>
             </div>
         </div>
-        </div>
+        <!-- End Modal create Food -->
     </div>
 </template>
 <script>
     import toastr from 'toastr';
-    toastr.options.timeOut = 2000; 
+    import formatNum from 'format-num';
     export default {
-        mounted(){
+        created(){
             this.getFoods();
         },
         data(){
             return{
-                foods: null,
+                foods: [],
                 food:{
                     id:'',
                     name:'',
@@ -86,13 +106,22 @@
                 },
                 errors:null,
                 editFoodModal:false,
+                currentPage : 1,
+                lastPage:1,
+                findTemp:'',
+                find:''
             }
         },
         methods:{
-            getFoods: function(){
-                axios.get('foods').then(response=>{
-                    this.foods = response.data;
+            getFoods: function(nextPage=1){
+                var page = nextPage;
+                if(page<=this.lastPage){
+                    axios.get('foods?page='+page+'&name='+this.find).then(response=>{
+                    this.foods = response.data.data;
+                    this.currentPage = response.data.current_page;
+                    this.lastPage = response.data.last_page;
                 });
+                }
             },
             newFood: function(){
                 if(this.editFoodModal){
@@ -149,6 +178,19 @@
                 this.food.name = '';
                 this.food.description = '';
                 this.food.price = '';
+            },
+            convertMoney: function(price){
+                return formatNum(price);
+            },
+            buttonBackIsActive: function(){
+                return this.currentPage > 1 ? '' : 'disabled';
+            },
+            buttonUpIsActive: function(){
+                return this.currentPage === this.lastPage ? 'disabled' : '';
+            },
+            addFind: function(){
+                this.find = this.findTemp;
+                this.getFoods();
             }
         }
     }

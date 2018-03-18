@@ -2,10 +2,10 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-success btn-sm" v-on:click="getTables(); showSuccess()">Actualizar</button>
+                <button class="btn btn-primary btn-sm" v-on:click="getTables(); showSuccess()">Actualizar</button>
             </div><br><br>
             <!--Listado de mesas-->
-            <div class="col-md-4" v-for="(table, index) in tables">
+            <div class="col-lg-4 col-md-6 col-sm-12" v-for="(table, index) in tables">
                 <div class="card" style="height: 13rem;">
                     <div class="card-header">
                         {{ table.name }} 
@@ -17,9 +17,10 @@
                         <div id="div1">
                             <!--Listado de comidas para la mesa actual-->
                             <table class="table table-sm" style="font-size:12px">
-                                <tr v-for="foodTemp in table.foodtabletemps">
+                                <tr v-for="(foodTemp, index) in table.foodtabletemps">
                                     <td>{{ foodTemp.food.name }}</td>
-                                    <td>${{ foodTemp.food.price }}</td>
+                                    <td>${{ convertToMoney(foodTemp.food.price) }}</td>
+                                    <td><button class="btn  btn-sm" v-on:click="deleteFoodFromTable(foodTemp.id)">Quitar</button></td>
                                 </tr>
                             </table>
                             <!--Fin Listado de comidas para la mesa actual-->
@@ -30,9 +31,11 @@
                         <button type="button" class="btn btn-info btn-sm" v-if="!table.state" v-on:click="showModalFoods(table.id)">Agregar plato</button>
                         <button type="button" class="btn btn-success btn-sm" v-if="table.foodtabletemps.length>0" v-on:click="pay(table.id)">Pagar</button>
                         <!--<button class="btn btn-danger btn-sm" v-if="!table.state">Cancelar pedido</button>-->
+                        <!--Total del pepido-->
                         <div class="float-right" v-if="table.foodtabletemps.length>0">
-                            Total: ${{ calculateTotalTable(index) }}
+                            ${{ calculateTotalTable(index) }}
                         </div>
+                        <!--Fin Total del pepido-->
                     </div>
                 </div><br>
             </div>
@@ -48,11 +51,9 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form>
                             <div class="form-group">
                                 <input type="text" class="form-control" placeholder="Buscar" v-model="find" v-on:keyup="getFoods()">
                             </div>
-                        </form>
                             <div id="div2">
                                 <table class="table table-hover table-sm">
                                 <thead>
@@ -91,18 +92,18 @@
                     <center>
                         <div class="form-group">
                             <label for="">Total a pagar</label>
-                            <h3 v-text="'$'+priceTotal"></h3>
+                            <h3 v-text="'$'+convertToMoney(priceTotal)"></h3>
                         </div>
                         <div class="form-group">
                             <label for="">Cantidad con que pagan</label>
                             <form v-if="!payShowResult" v-on:submit.prevent="calculateTotal()">
                                     <input type="number" class="form-control" placeholder="" v-model="priceWithPay">
                             </form>
-                            <h3 v-if="payShowResult" v-text="'$'+priceWithPay"></h3>
+                            <h3 v-if="payShowResult" v-text="'$'+convertToMoney(priceWithPay)"></h3>
                         </div>
                         <div class="form-group" v-if="payShowResult">
                             <label for="">Devolver</label>
-                            <h3 v-text="'$'+priceBack"></h3>
+                            <h3 v-text="'$'+convertToMoney(priceBack)"></h3>
                         </div>
 
                         <div class="form-check" v-if="confirmPay">
@@ -114,9 +115,9 @@
                         </div>
                     </center>
                 </div>
-                <div class="modal-footer" v-if="confirmPay">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-danger" v-on:click="cancelPay()">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Confirmar pago</button>
+                    <button type="button" class="btn btn-primary" v-if="confirmPay" v-on:click="payNow()">Confirmar pago</button>
                 </div>
                 </div>
             </div>
@@ -127,6 +128,7 @@
 </template>
 <script>
     import toastr from 'toastr';    
+    import FormatNum from 'format-num';
     export default {
         mounted(){
             this.getTables();
@@ -152,6 +154,8 @@
             getTables: function(){
                 axios.get('tables').then(response=>{
                     this.tables = response.data;
+                }).catch(errors=>{
+                    toastr.warning('Ha ocurrido un error, actualiza por favor');
                 });
             },
             getFoods: function(){
@@ -162,6 +166,8 @@
             assignTable: function(tableId, index){
                 axios.put('sales/'+tableId, {name:'Alexis'}).then(response=>{
                     this.tables[index].state = !this.tables[index].state;
+                }).catch(errors=>{
+                    toastr.warning('Ha ocurrido un error, actualiza por favor');
                 });
             },
             showModalFoods: function(tableId){
@@ -173,6 +179,16 @@
                 toastr.success('Comida añadida');
                 axios.post('sales', data).then(response=>{
                     this.getTables();
+                }).catch(errors=>{
+                    toastr.warning('Ha ocurrido un error, actualiza por favor');
+                });
+            },
+            deleteFoodFromTable: function(foodId, index){
+                axios.delete('sales/'+foodId).then(response=>{
+                    toastr.success('Comida eliminada de la mesa');
+                    this.getTables();
+                }).catch(errors=>{
+                    toastr.warning('Ha ocurrido un error, actualiza por favor');
                 });
             },
             showSuccess: function(){
@@ -183,12 +199,15 @@
                 this.tables[index].foodtabletemps.forEach(element => {
                     total += Number(element.food.price);
                 });
-                return total;
+                return this.convertToMoney(total);
             },
             pay: function(tableId){
                 axios.post('pay', {tableId:tableId}).then(response=>{
                     this.priceTotal = response.data;
+                    this.tableNow = tableId;
                     $('#modalPay').modal({backdrop: 'static', keyboard: false})
+                }).catch(errors=>{
+                    toastr.warning('Ha ocurrido un error, actualiza por favor');
                 });
             },
             cancelPay: function(){
@@ -198,6 +217,17 @@
                 this.confirmPay = false;
                 $('#modalPay').modal('hide');
             },
+            payNow: function(){
+                axios.post('sales/paynow', {tableId:this.tableNow}).then(response=>{
+                   $('#modalPay').modal('hide');
+                   toastr.success('Cuenta pagada con éxito');
+                   this.payShowResult = false;
+                    this.priceBack = null;
+                    this.priceWithPay = null;
+                    this.confirmPay = false;
+                   this.getTables();
+                });
+            },
             calculateTotal: function(){
                 if(this.priceWithPay < this.priceTotal){
                     toastr.warning('El dinero no es suficiente para pagar la cuenta');
@@ -206,6 +236,9 @@
                     this.payShowResult = true;
                     this.confirmPay = true;
                 }
+            },
+            convertToMoney(price){
+                return FormatNum(price);
             }
         },
         filters: {

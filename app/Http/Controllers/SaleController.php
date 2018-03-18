@@ -1,11 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Foodtabletemp;
+
 
 use Illuminate\Http\Request;
 use App\Table;
 use App\Food;
+use App\Foodtabletemp;
+use App\Sale;
+use App\Saledetail;
 
 class SaleController extends Controller
 {
@@ -39,5 +42,37 @@ class SaleController extends Controller
             $prices += $food->food->price;
         }
         return $prices;
+    }
+    public function destroy($id){
+        Foodtabletemp::findOrFail($id)->delete();
+    }
+    public function paynow(Request $request){
+        //Obteniendo todas las comidas temporales de la mesa
+        $foodsTempInTable = Foodtabletemp::where('table_id', $request->input('tableId'))->get();
+        //Eliminando todas las comidas temporales de la mesa
+        Foodtabletemp::where('table_id', $request->input('tableId'))->delete();
+        //Cambiando el estado de la mesa a libre
+        Table::findOrFail($request->input('tableId'))->update(['state'=>true]);
+
+
+        //Guardando la venta de la mesa en Sale
+        //Obteniendo el precio total
+        $priceTotal = 0;
+        foreach ($foodsTempInTable as $food) {
+            $priceTotal += $food->food->price;
+        }
+        $sale = new Sale();
+        $sale->table_id = $request->input('tableId');
+        $sale->pricetotal = $priceTotal;
+        $sale->save();
+
+        //Guardando los detalles de la venta
+        foreach($foodsTempInTable as $foodTemp){
+            $saledetail = new Saledetail();
+            $saledetail->sale_id = $sale->id;
+            $saledetail->food_id = $foodTemp->food_id;
+            $saledetail->foodprice = $foodTemp->food->price;
+            $saledetail->save();
+        }
     }
 }
