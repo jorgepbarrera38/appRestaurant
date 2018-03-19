@@ -10,7 +10,7 @@
 </head>
 <body>
     <div id="app">
-        @include('partials.navbar')
+        <navbar-component></navbar-component>
         <router-view></router-view>
     </div>
     <script src="{{ asset('js/app.js') }}"></script>

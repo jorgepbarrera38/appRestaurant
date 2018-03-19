@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-primary btn-sm" v-on:click="getTables(); showSuccess()">Actualizar</button>
+                <button class="btn btn-success btn-sm" v-on:click="getTables(); showSuccess()">Actualizar</button>
             </div><br><br>
             <!--Listado de mesas-->
             <div class="col-lg-4 col-md-6 col-sm-12" v-for="(table, index) in tables">
@@ -29,7 +29,7 @@
                     <div class="card-footer">
                         <button class="btn btn-default btn-sm" v-if="table.state" v-on:click="assignTable(table.id, index)">Asignar mesa</button>
                         <button type="button" class="btn btn-info btn-sm" v-if="!table.state" v-on:click="showModalFoods(table.id)">Agregar plato</button>
-                        <button type="button" class="btn btn-success btn-sm" v-if="table.foodtabletemps.length>0" v-on:click="pay(table.id)">Pagar</button>
+                        <button type="button" class="btn btn-success btn-sm" v-if="table.foodtabletemps.length>0" v-on:click="pay(table.id, index)">Pagar</button>
                         <!--<button class="btn btn-danger btn-sm" v-if="!table.state">Cancelar pedido</button>-->
                         <!--Total del pepido-->
                         <div class="float-right" v-if="table.foodtabletemps.length>0">
@@ -97,7 +97,10 @@
                         <div class="form-group">
                             <label for="">Cantidad con que pagan</label>
                             <form v-if="!payShowResult" v-on:submit.prevent="calculateTotal()">
-                                    <input type="number" class="form-control" placeholder="" v-model="priceWithPay">
+                                    <div class="form-group">
+                                        <input type="number" class="form-control" placeholder="" v-model="priceWithPay">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Pagar</button>
                             </form>
                             <h3 v-if="payShowResult" v-text="'$'+convertToMoney(priceWithPay)"></h3>
                         </div>
@@ -147,15 +150,22 @@
                 priceWithPay: null,
                 priceBack:null,
 
-                confirmPay:false
+                confirmPay:false,
+
+                indice:'',
+                foodAdd:false
             }
         },
         methods: {
             getTables: function(){
                 axios.get('tables').then(response=>{
                     this.tables = response.data;
+                    if(this.foodAdd){
+                        toastr.success('Comida añadida');
+                        this.foodAdd = false;
+                    }
                 }).catch(errors=>{
-                    toastr.warning('Ha ocurrido un error, actualiza por favor');
+                    toastr.warning('Ha ocurrido un error al llamar las mesas, actualiza por favor');
                 });
             },
             getFoods: function(){
@@ -164,10 +174,10 @@
                 });
             },
             assignTable: function(tableId, index){
-                axios.put('sales/'+tableId, {name:'Alexis'}).then(response=>{
-                    this.tables[index].state = !this.tables[index].state;
+                this.tables[index].state = !this.tables[index].state;
+                axios.put('sales/'+tableId).then(response=>{ 
                 }).catch(errors=>{
-                    toastr.warning('Ha ocurrido un error, actualiza por favor');
+                    toastr.warning('Ups, algo salió mal al asignar la mesa, actualiza por favor');
                 });
             },
             showModalFoods: function(tableId){
@@ -176,11 +186,11 @@
             },
             addFoodTable: function(foodId){
                 var data = {table:this.tableNow, food:foodId}
-                toastr.success('Comida añadida');
                 axios.post('sales', data).then(response=>{
-                    this.getTables();
+                    this.foodAdd = true;
+                    this.getTables();//Importante esto
                 }).catch(errors=>{
-                    toastr.warning('Ha ocurrido un error, actualiza por favor');
+                    toastr.warning('Ha ocurrido un error al agregar comida a la mesa, actualiza por favor');
                 });
             },
             deleteFoodFromTable: function(foodId, index){
@@ -201,13 +211,15 @@
                 });
                 return this.convertToMoney(total);
             },
-            pay: function(tableId){
+            pay: function(tableId, index){
+                //Se abre el modal con la información de pago
                 axios.post('pay', {tableId:tableId}).then(response=>{
                     this.priceTotal = response.data;
                     this.tableNow = tableId;
+                    this.indice = index;
                     $('#modalPay').modal({backdrop: 'static', keyboard: false})
                 }).catch(errors=>{
-                    toastr.warning('Ha ocurrido un error, actualiza por favor');
+                    toastr.warning('Ha ocurrido un error al mostrar la cantidad a pagar, actualiza por favor');
                 });
             },
             cancelPay: function(){
@@ -218,13 +230,15 @@
                 $('#modalPay').modal('hide');
             },
             payNow: function(){
+                this.tables[this.indice].state = true;
+                this.tables[this.indice].foodtabletemps = [];
                 axios.post('sales/paynow', {tableId:this.tableNow}).then(response=>{
                    $('#modalPay').modal('hide');
                    toastr.success('Cuenta pagada con éxito');
                    this.payShowResult = false;
-                    this.priceBack = null;
-                    this.priceWithPay = null;
-                    this.confirmPay = false;
+                   this.priceBack = null;
+                   this.priceWithPay = null;
+                   this.confirmPay = false;
                    this.getTables();
                 });
             },

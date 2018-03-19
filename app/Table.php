@@ -11,4 +11,7 @@ class Table extends Model
     public function foodtabletemps(){
         return $this->hasMany('App\Foodtabletemp');
     }
+    public function sales(){
+        return $this->hasMany('App\Sale');
+    }
 }

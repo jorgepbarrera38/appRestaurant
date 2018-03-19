@@ -17,4 +17,7 @@ class Food extends Model
             $query->where('name', 'LIKE', '%'.$name.'%');
         }
     }
+    public function details(){
+        $this->hasMany('App\Detail');
+    }
 }

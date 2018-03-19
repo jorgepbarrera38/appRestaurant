@@ -5,7 +5,7 @@
               <div class="card">
                   <div class="card-header">Mesas 
                       <div class="float-right">
-                          <button class="btn btn-primary btn-sm" v-on:click="addTableShowForm=true">Agregar mesa</button>
+                          <button class="btn btn-success btn-sm" v-on:click="addTableShowForm=true">Agregar mesa</button>
                       </div>
                   </div>
                   <div class="card-body">

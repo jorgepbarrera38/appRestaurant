@@ -21,3 +21,4 @@ Route::get('sales/getfoods', 'SaleController@getfoods');
 Route::post('sales/paynow', 'SaleController@paynow');
 Route::resource('sales', 'SaleController');
 Route::post('pay', 'SaleController@pay');
+Route::resource('reports', 'ReportController');
