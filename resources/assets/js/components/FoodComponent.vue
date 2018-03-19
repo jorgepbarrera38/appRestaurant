@@ -4,13 +4,13 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        Listado de comidas 
+                        Carta
                         <div class="float-right">
-                            Página {{ currentPage }} de {{ lastPage }} <span class="glyphicon glyphicon-search">sdf</span>
+                            Página {{ currentPage }} de {{ lastPage }}
                             <button class="btn btn-primary btn-sm" v-bind:class="buttonBackIsActive()" v-on:click="getFoods(currentPage-1)">Atrás</button>
                             <button class="btn btn-primary btn-sm" v-bind:class="buttonUpIsActive()" v-on:click="getFoods(currentPage+1)">Adelante</button>
 
-                            <a href="" class="btn btn-primary btn-sm" v-on:click.prevent="newFood()">Nuevo</a>
+                            <a href="" class="btn btn-success btn-sm" v-on:click.prevent="newFood()">Nuevo</a>
                         </div>
                     </div>
                     <div class="card-body">

@@ -6,7 +6,7 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <router-link class="nav-link" :to="{ name: 'foods' }"><span class="sr-only">(current)</span>Comidas</router-link>
+        <router-link class="nav-link" :to="{ name: 'foods' }"><span class="sr-only">(current)</span>Carta</router-link>
       </li>
       <li class="nav-item active">
         <router-link class="nav-link" :to="{ name: 'tables' }"><span class="sr-only">(current)</span>Mesas</router-link>
