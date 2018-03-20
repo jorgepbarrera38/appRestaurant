@@ -11,32 +11,47 @@ class FoodsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Food::class, 300)->create();
-        /*
+        //factory(App\Food::class, 300)->create();
+        
         Food::create([
-            'name' => 'Hamburguesa de carne',
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin leo sem, molestie et semper id',
-            'price' => 5500
+            'name' => 'Ensalada Carmen',
+            'description' => 'Lechugas mixtas de finca Del Campo, palmitos frescos del Putumayo, cítricos, mango, quinoa tostada, vinagreta de arazá amazónica',
+            'price' => 20000
         ]);
         Food::create([
-            'name' => 'Perro caliente americano',
-            'description' => 'Nunc eleifend euismod dolor, suscipit eleifend nulla interdum non. Mauris porttitor venenatis elit sed finibus. Suspendisse tincidunt eu',
-            'price' => 4000
+            'name' => 'Langosta',
+            'description' => 'Sellada en mantequilla avellenada, garam masala, puré de coliflor rostizada al azafrán, tatsoi, vinagreta de cítricos.',
+            'price' => 35000
         ]);
         Food::create([
-            'name' => 'Tacos',
-            'description' => 'Nam id ullamcorper lacus. Aliquam erat volutpat. Sed a fringilla felis, a aliquam',
-            'price' => 4800
+            'name' => 'Cangrejo',
+            'description' => 'Ensalada de centolla & vadouvan caribeño, aguacate, masa soplada, dashi de cangrejo, perlas negras, mandarina & jengibre',
+            'price' => 40000
         ]);
         Food::create([
-            'name' => 'Pollo frito',
-            'description' => 'Frecuente que los establecimientos "inviten" a los clien',
-            'price' => 6000
+            'name' => 'Ceviche laminado',
+            'description' => 'Pesca del día, leche de tigre de corozo costeño, pepino comprimido, shio kombu,copoazú, humo de coco carbonizado',
+            'price' => 35000
         ]);
         Food::create([
-            'name' => 'Tacos al pastor',
-            'description' => 'Consistencia y para preservar frescura. Esto requiere un alto grado de ingenie',
-            'price' => 6000
-        ]);*/
+            'name' => 'Carimañola',
+            'description' => 'Yuca & achiote, centro liquido de foie gras & trufas negras, salsa bigarade de temporada, suero costeño',
+            'price' => 25000
+        ]);
+        Food::create([
+            'name' => 'Atollado',
+            'description' => 'Arroz meloso con bisque de crustáceos, camarones, almejas negras, chicharrón, ensaladilla de arvejas, vinagreta de tamarindo, hogao',
+            'price' => 25000
+        ]);
+        Food::create([
+            'name' => 'Turrón de chocolate',
+            'description' => 'Chocolate Santander, tierra de chocolate, helado de coco & limón, espuma de copoazú',
+            'price' => 18000
+        ]);
+        Food::create([
+            'name' => 'Tacos coreanos',
+            'description' => 'Lonjas de res marinadas al estilo coreano, selladas a la plancha, kimchi picante de repollo morado & zanahoria, peras asiáticas, cogollo asado, tortillas de cilantro & maíz',
+            'price' => 27000
+        ]);
     }
 }

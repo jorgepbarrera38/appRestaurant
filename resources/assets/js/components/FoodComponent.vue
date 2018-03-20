@@ -34,7 +34,7 @@
                             <tbody>
                                 <tr v-for="food in foods">
                                     <td>{{ food.name }}</td>
-                                    <td>{{ food.description.substring(0, 60) }}</td>
+                                    <td>{{ food.description.substring(0, 90) }}</td>
                                     <td>${{ convertMoney(food.price) }}</td>
                                     <td>
                                         <button class="btn btn-info btn-sm">Ver</button>

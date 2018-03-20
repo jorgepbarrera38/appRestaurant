@@ -17,14 +17,19 @@ class SaleController extends Controller
         return Food::name($nameFind)->paginate(6);
     }
     public function store(Request $request){
-        $request->validate([
-            'table' => 'required',
-            'food' => 'required',
-        ]);
-        $foodTemp = new Foodtabletemp;
-        $foodTemp->table_id = $request->input('table');
-        $foodTemp->food_id = $request->input('food');
-        $foodTemp->save();
+       $request->validate([
+           'table' => 'required',
+           'foods' => 'required',
+       ]);
+       $table = $request->input('table');
+       $foods = $request->input('foods');
+       foreach($foods as $food){
+            $foodtabletemp = new Foodtabletemp();
+            $foodtabletemp->food_id = $food;
+            $foodtabletemp->table_id = $table;
+            $foodtabletemp->save();
+       }
+       return "ok";
     }
     public function update(Request $request, $id){
         $table = Table::findOrFail($id);

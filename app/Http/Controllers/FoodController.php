@@ -9,7 +9,7 @@ class FoodController extends Controller
 {
     public function index(){
         $findName = request('name');
-        $foods = Food::name($findName)->orderBy('id', 'desc')->paginate(9);
+        $foods = Food::name($findName)->orderBy('id', 'desc')->paginate(7);
         return $foods;
     }
     public function show($id){

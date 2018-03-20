@@ -28,7 +28,7 @@
                     </div>
                     <div class="card-footer">
                         <button class="btn btn-default btn-sm" v-if="table.state" v-on:click="assignTable(table.id, index)">Asignar mesa</button>
-                        <button type="button" class="btn btn-info btn-sm" v-if="!table.state" v-on:click="showModalFoods(table.id)">Agregar plato</button>
+                        <button type="button" class="btn btn-info btn-sm" v-if="!table.state" v-on:click="showModalFoods(table.id)">Realizar pedido</button>
                         <button type="button" class="btn btn-success btn-sm" v-if="table.foodtabletemps.length>0" v-on:click="pay(table.id, index)">Pagar</button>
                         <!--<button class="btn btn-danger btn-sm" v-if="!table.state">Cancelar pedido</button>-->
                         <!--Total del pepido-->
@@ -45,36 +45,60 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Agregar comida</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
+                        <h5 class="modal-title" id="exampleModalLongTitle">{{ seeFoodFromListState ? 'Pedido' : 'Carta' }}</h5>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modal-body">
+                        <!--Listado de comidas para escoger-->
+                        <template v-if="!seeFoodFromListState">
                             <div class="form-group">
                                 <input type="text" class="form-control" placeholder="Buscar" v-model="find" v-on:keyup="getFoods()">
                             </div>
                             <div id="div2">
                                 <table class="table table-hover table-sm">
-                                <thead>
-                                    <th>Nombre</th>
-                                    <th>Descripción</th>
-                                    <th>Precio</th>
-                                    <th>#</th>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="food in foods">
-                                        <td>{{ food.name }}</td>
-                                        <td>{{ food.description }}</td>
-                                        <td>{{ food.price }}</td>
-                                        <td><button class="btn btn-success btn-sm" v-on:click="addFoodTable(food.id)">Añadir</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    <thead>
+                                        <th>Nombre</th>
+                                        <th>Descripción</th>
+                                        <th>Precio</th>
+                                        <th>#</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="food in foods">
+                                            <td>{{ food.name }}</td>
+                                            <td>{{ food.description }}</td>
+                                            <td>${{ convertToMoney(food.price) }}</td>
+                                            <td><button class="btn btn-success btn-sm" v-on:click="addFoodTable(food.id, food.name, food.price)">Añadir</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
+                        </template>
+                        <!--Listado de comida escogida por el cliente-->
+                        <template v-if="seeFoodFromListState">
+                            <div id="div3" v-if="foodtabletemps.length>0">
+                                <table class="table table-hover table-sm">
+                                    <thead>
+                                        <th>Nombre</th>
+                                        <th>Precio</th>
+                                        <th>#</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(foodSelected, index) in foodtabletemps">
+                                            <td>{{ foodSelected.name }}</td>
+                                            <td>${{ convertToMoney(foodSelected.price) }}</td>
+                                            <td><button class="btn btn-danger btn-sm" v-on:click="deleteFoodTemp(index)">Eliminar</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p v-else>No has añadido nada al pedido</p>
+                        </template>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button class="btn btn-success" v-if="foodtabletemps.length>0 && seeFoodFromListState" v-on:click="saveFoodsTemp()">Guardar pedido</button>
+                        <button class="btn btn-primary" v-on:click="seeFoodFromListState ? seeFoodFromListState=false : seeFoodFromList()">
+                            {{ seeFoodFromListState ? 'Añadir más a la lista' : 'Ver pedido' }}
+                        </button>
+                        <button type="button" class="btn btn-secondary" v-on:click="closeModalFoods()">Cerrar</button>
                     </div>
                     </div>
                 </div>
@@ -142,7 +166,6 @@
                 tables:null,
                 foods:null,
 
-                tableNow:null,
                 priceTotal:null,
 
                 find:'',
@@ -152,8 +175,10 @@
 
                 confirmPay:false,
 
-                indice:'',
-                foodAdd:false
+                foodAdd:false,
+                foodtabletemps:[],
+                seeFoodFromListState:false,
+                tableNow:'',
             }
         },
         methods: {
@@ -180,23 +205,44 @@
                     toastr.warning('Ups, algo salió mal al asignar la mesa, actualiza por favor');
                 });
             },
-            showModalFoods: function(tableId){
+            showModalFoods: function(tableId){//ok
                 this.tableNow = tableId;
-                $('#modalFoods').modal('show');
+                $('#modalFoods').modal({backdrop: 'static', keyboard: false})
             },
-            addFoodTable: function(foodId){
-                var data = {table:this.tableNow, food:foodId}
+            closeModalFoods: function(){//ok
+                $('#modalFoods').modal('hide');
+                this.seeFoodFromListState = false;
+                this.foodtabletemps = [];
+            },
+            addFoodTable: function(foodId, foodName, foodPrice){//ok
+                this.foodtabletemps.push({ id:foodId, name:foodName, price:foodPrice });
+                toastr.success('Comida añadida a la lista');
+            },
+            seeFoodFromList: function(){//ok
+                this.seeFoodFromListState = true;
+            },  
+            deleteFoodTemp: function(indice){//ok
+                this.foodtabletemps.splice(indice, 1);
+                toastr.success('Comida eliminada del pedido');
+            },
+            saveFoodsTemp: function(){//ok
+                var foodsId = [];
+                this.foodtabletemps.forEach(food => {
+                    foodsId.push(food.id);
+                });
+                var data = {table:this.tableNow, foods:foodsId};
                 axios.post('sales', data).then(response=>{
-                    this.foodAdd = true;
-                    this.getTables();//Importante esto
-                }).catch(errors=>{
-                    toastr.warning('Ha ocurrido un error al agregar comida a la mesa, actualiza por favor');
+                    this.getTables();
+                    $('#modalFoods').modal('hide');
+                    toastr.success('El pedido ha sido realizado');
+                    this.seeFoodFromListState = false;
+                    this.foodtabletemps = [];
                 });
             },
             deleteFoodFromTable: function(foodId, index){
                 axios.delete('sales/'+foodId).then(response=>{
-                    toastr.success('Comida eliminada de la mesa');
                     this.getTables();
+                    toastr.success('Comida eliminada de la mesa');
                 }).catch(errors=>{
                     toastr.warning('Ha ocurrido un error, actualiza por favor');
                 });
@@ -272,7 +318,15 @@
         }
         #div2 {
             overflow-y: scroll;
-            height: 300px;
+            height: 270px;
+        }
+        #div3 {
+            overflow-y: scroll;
+            height: 323px;
+        }
+        #modal-body {
+            min-height:360px; 
+            overflow-y: auto;
         }
 </style>
 
