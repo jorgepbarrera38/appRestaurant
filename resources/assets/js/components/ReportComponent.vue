@@ -3,31 +3,36 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="card">
-                    <div class="card-header">Opciónes de búsqueda</div>
+                    <div class="card-header">
+                        Opciónes de búsqueda
+                    </div>
                     <div class="card-body">
                         <form v-on:submit.prevent="findResults()">
                             <div class="form-group">
                                 <label for="">De: </label>
-                                <input type="datetime-local" name="bdaytime" v-model="dateFrom" class="form-control">
+                                <input type="date" name="bdaytime" v-model="dateFrom" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="">A: </label>
-                                <input type="datetime-local" name="bdaytime" v-model="dateTo" class="form-control">
+                                <input type="date" name="bdaytime" v-model="dateTo" class="form-control">
                             </div>
                             <button class="btn btn-primary btn-block" type="submit">Buscar</button>
                         </form>
                     </div>
                 </div>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-5">
                 <div class="card">
                     <div class="card-header">
-                        Resultados
+                        
                         <div class="float-right">
                             Total de venta: <strong>${{ convertToMoney(calculateTotal) }}</strong>
                         </div>
                         </div>
                     <div class="card-body">
+                        <div class="alert alert-success" v-if="showChargin">
+                            Cargando...
+                        </div>
                         <table class="table table-hover table-sm" v-if="sales.length>0">
                             <thead>
                                 <th>Mesa</th>
@@ -77,6 +82,30 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        Los más vendidos
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-success" v-if="showChargin">
+                            Cargando...
+                        </div>
+                        <table class="table table-hover table-sm" v-if="sales.length>0">
+                            <thead>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                            </thead>
+                            <tbody>
+                                <tr v-for="food in foodsMostSolds">
+                                    <td>{{ food.name }}</td>
+                                    <td>{{ food.cant }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -92,15 +121,21 @@
                 dateTo :'',
                 sales:[],
                 saleDetails:[],
+                foodsMostSolds:[],
+                showChargin:false,
             }
         },
         methods: {
             findResults: function(){
+                this.showChargin=true;
                 this.sales = [];
                 axios.get('reports?datefrom='+this.dateFrom+'&dateto='+this.dateTo).then(response=>{
-                    this.sales = response.data;
+                   this.sales = response.data.sales;
+                   this.foodsMostSolds = response.data.foodsMostSold;
+                   this.showChargin=false;
                 }).catch(errors=>{
-                    toastr.warning("Hay errores en los parámetros de búsqueda");
+                    this.showChargin=false;
+                    toastr.error('Hay errores en los parámetros de búsqueda');
                 });
             },
             convertToMoney: function(value){

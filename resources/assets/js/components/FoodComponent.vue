@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        Carta
+                        Productos
                         <div class="float-right">
                             Página {{ currentPage }} de {{ lastPage }}
                             <button class="btn btn-primary btn-sm" v-bind:class="buttonBackIsActive()" v-on:click="getFoods(currentPage-1)">Atrás</button>
@@ -53,7 +53,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">{{ editFoodModal ? 'Editar comida' : 'Nueva comida' }}</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">{{ editFoodModal ? 'Editar comida' : 'Nuevo' }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -65,14 +65,14 @@
                     <form v-on:submit.prevent="editFoodModal ? updateFood(food.id) : saveFood()">
                         <div class="form-group">
                             <label for="">Nombre</label>
-                            <input type="text" class="form-control" placeholder="Nombre de la comida" v-model="food.name" maxlength="50">
+                            <input type="text" class="form-control" v-model="food.name" maxlength="50">
                         </div>
                         <div class="form-group">
                             <label for="">Descripción</label>
-                            <textarea rows="2" v-model="food.description" placeholder="Descripción de la comida" class="form-control" maxlength="150"></textarea>
+                            <textarea rows="2" v-model="food.description"  class="form-control" maxlength="150"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="">Price</label>
+                            <label for="">Precio</label>
                             <input type="number" class="form-control" v-model="food.price">
                         </div>
                         <button type="submit" style="display:none"></button>
@@ -137,7 +137,7 @@
             saveFood: function(){
                 axios.post('foods', this.food).then(response=>{
                     $('#newFoodModal').modal('hide');
-                    toastr.success("Nueva comida almacenada");
+                    toastr.success("Nuevo producto almacenado");
                     this.cleanFields();
                     this.getFoods();
                 }).catch(errors=>{

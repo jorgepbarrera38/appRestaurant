@@ -9,4 +9,7 @@ class Sale extends Model
     public function table(){
         return $this->belongsTo('App\Table');
     }
+    public function saledetails(){
+        return $this->hasMany(Saledetail::class);
+    }
 }

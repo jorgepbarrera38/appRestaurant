@@ -67697,7 +67697,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
+  return _c("div", { staticClass: "container-fluid" }, [
     _c(
       "div",
       { staticClass: "row" },
@@ -67721,7 +67721,7 @@ var render = function() {
         _c("br"),
         _vm._v(" "),
         _vm._l(_vm.tables, function(table, index) {
-          return _c("div", { staticClass: "col-lg-4 col-md-6 col-sm-12" }, [
+          return _c("div", { staticClass: "col-lg-3 col-md-6 col-sm-12" }, [
             _c(
               "div",
               { staticClass: "card", staticStyle: { height: "13rem" } },
@@ -68552,7 +68552,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.post('foods', this.food).then(function (response) {
                 $('#newFoodModal').modal('hide');
-                __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.success("Nueva comida almacenada");
+                __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.success("Nuevo producto almacenado");
                 _this2.cleanFields();
                 _this2.getFoods();
             }).catch(function (errors) {
@@ -68629,7 +68629,7 @@ var render = function() {
       _c("div", { staticClass: "col-md-12" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header" }, [
-            _vm._v("\n                    Carta\n                    "),
+            _vm._v("\n                    Productos\n                    "),
             _c("div", { staticClass: "float-right" }, [
               _vm._v(
                 "\n                        Página " +
@@ -68814,9 +68814,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      _vm._s(
-                        _vm.editFoodModal ? "Editar comida" : "Nueva comida"
-                      )
+                      _vm._s(_vm.editFoodModal ? "Editar comida" : "Nuevo")
                     )
                   ]
                 ),
@@ -68861,11 +68859,7 @@ var render = function() {
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: {
-                          type: "text",
-                          placeholder: "Nombre de la comida",
-                          maxlength: "50"
-                        },
+                        attrs: { type: "text", maxlength: "50" },
                         domProps: { value: _vm.food.name },
                         on: {
                           input: function($event) {
@@ -68893,11 +68887,7 @@ var render = function() {
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: {
-                          rows: "2",
-                          placeholder: "Descripción de la comida",
-                          maxlength: "150"
-                        },
+                        attrs: { rows: "2", maxlength: "150" },
                         domProps: { value: _vm.food.description },
                         on: {
                           input: function($event) {
@@ -68915,7 +68905,7 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group" }, [
-                      _c("label", { attrs: { for: "" } }, [_vm._v("Price")]),
+                      _c("label", { attrs: { for: "" } }, [_vm._v("Precio")]),
                       _vm._v(" "),
                       _c("input", {
                         directives: [
@@ -69181,6 +69171,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -69192,7 +69211,9 @@ __WEBPACK_IMPORTED_MODULE_2_moment___default.a.locale('es');
             dateFrom: '',
             dateTo: '',
             sales: [],
-            saleDetails: []
+            saleDetails: [],
+            foodsMostSolds: [],
+            showChargin: false
         };
     },
 
@@ -69200,11 +69221,15 @@ __WEBPACK_IMPORTED_MODULE_2_moment___default.a.locale('es');
         findResults: function findResults() {
             var _this = this;
 
+            this.showChargin = true;
             this.sales = [];
             axios.get('reports?datefrom=' + this.dateFrom + '&dateto=' + this.dateTo).then(function (response) {
-                _this.sales = response.data;
+                _this.sales = response.data.sales;
+                _this.foodsMostSolds = response.data.foodsMostSold;
+                _this.showChargin = false;
             }).catch(function (errors) {
-                __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.warning("Hay errores en los parámetros de búsqueda");
+                _this.showChargin = false;
+                __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.error('Hay errores en los parámetros de búsqueda');
             });
         },
         convertToMoney: function convertToMoney(value) {
@@ -69516,7 +69541,9 @@ var render = function() {
       _c("div", { staticClass: "col-md-3" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header" }, [
-            _vm._v("Opciónes de búsqueda")
+            _vm._v(
+              "\n                    Opciónes de búsqueda\n                "
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
@@ -69544,7 +69571,7 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
-                    attrs: { type: "datetime-local", name: "bdaytime" },
+                    attrs: { type: "date", name: "bdaytime" },
                     domProps: { value: _vm.dateFrom },
                     on: {
                       input: function($event) {
@@ -69570,7 +69597,7 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
-                    attrs: { type: "datetime-local", name: "bdaytime" },
+                    attrs: { type: "date", name: "bdaytime" },
                     domProps: { value: _vm.dateTo },
                     on: {
                       input: function($event) {
@@ -69597,10 +69624,9 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-9" }, [
+      _c("div", { staticClass: "col-md-5" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header" }, [
-            _vm._v("\n                    Resultados\n                    "),
             _c("div", { staticClass: "float-right" }, [
               _vm._v("\n                        Total de venta: "),
               _c("strong", [
@@ -69610,6 +69636,14 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
+            _vm.showChargin
+              ? _c("div", { staticClass: "alert alert-success" }, [
+                  _vm._v(
+                    "\n                        Cargando...\n                    "
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
             _vm.sales.length > 0
               ? _c("table", { staticClass: "table table-hover table-sm" }, [
                   _vm._m(0),
@@ -69701,6 +69735,41 @@ var render = function() {
             )
           ])
         ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-4" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v("\n                    Los más vendidos\n                ")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _vm.showChargin
+              ? _c("div", { staticClass: "alert alert-success" }, [
+                  _vm._v(
+                    "\n                        Cargando...\n                    "
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.sales.length > 0
+              ? _c("table", { staticClass: "table table-hover table-sm" }, [
+                  _vm._m(4),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.foodsMostSolds, function(food) {
+                      return _c("tr", [
+                        _c("td", [_vm._v(_vm._s(food.name))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(food.cant))])
+                      ])
+                    })
+                  )
+                ])
+              : _vm._e()
+          ])
+        ])
       ])
     ])
   ])
@@ -69772,6 +69841,16 @@ var staticRenderFns = [
         { staticClass: "btn btn-primary", attrs: { type: "button" } },
         [_vm._v("Save changes")]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("th", [_vm._v("Producto")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Cantidad")])
     ])
   }
 ]
@@ -69869,6 +69948,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         isActiveLink: function isActiveLink(url) {
             return url == this.$route.path ? 'active' : '';
+        },
+
+        ocultar: function ocultar() {
+            $('.navbar-collapse').collapse('hide');
         }
     }
 });
@@ -69902,10 +69985,17 @@ var render = function() {
                   "router-link",
                   { staticClass: "nav-link", attrs: { to: { name: "foods" } } },
                   [
-                    _c("span", { staticClass: "sr-only" }, [
-                      _vm._v("(current)")
-                    ]),
-                    _vm._v("Carta")
+                    _c(
+                      "span",
+                      {
+                        on: {
+                          click: function($event) {
+                            _vm.ocultar()
+                          }
+                        }
+                      },
+                      [_vm._v("Productos")]
+                    )
                   ]
                 )
               ],
@@ -69923,10 +70013,17 @@ var render = function() {
                     attrs: { to: { name: "tables" } }
                   },
                   [
-                    _c("span", { staticClass: "sr-only" }, [
-                      _vm._v("(current)")
-                    ]),
-                    _vm._v("Mesas")
+                    _c(
+                      "span",
+                      {
+                        on: {
+                          click: function($event) {
+                            _vm.ocultar()
+                          }
+                        }
+                      },
+                      [_vm._v("Mesas")]
+                    )
                   ]
                 )
               ],
@@ -69941,10 +70038,17 @@ var render = function() {
                   "router-link",
                   { staticClass: "nav-link", attrs: { to: { name: "sales" } } },
                   [
-                    _c("span", { staticClass: "sr-only" }, [
-                      _vm._v("(current)")
-                    ]),
-                    _vm._v("Ventas")
+                    _c(
+                      "span",
+                      {
+                        on: {
+                          click: function($event) {
+                            _vm.ocultar()
+                          }
+                        }
+                      },
+                      [_vm._v("Ventas")]
+                    )
                   ]
                 )
               ],
@@ -69962,10 +70066,17 @@ var render = function() {
                     attrs: { to: { name: "reports" } }
                   },
                   [
-                    _c("span", { staticClass: "sr-only" }, [
-                      _vm._v("(current)")
-                    ]),
-                    _vm._v("Reporte de ventas")
+                    _c(
+                      "span",
+                      {
+                        on: {
+                          click: function($event) {
+                            _vm.ocultar()
+                          }
+                        }
+                      },
+                      [_vm._v("Reportes")]
+                    )
                   ]
                 )
               ],

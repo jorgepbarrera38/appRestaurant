@@ -8,16 +8,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item" :class="isActiveLink('/foods')">
-                        <router-link class="nav-link" :to="{ name: 'foods' }"><span class="sr-only">(current)</span>Carta</router-link>
+                        <router-link class="nav-link" :to="{ name: 'foods' }"><span v-on:click="ocultar()">Productos</span></router-link>
                     </li>
                     <li class="nav-item" :class="isActiveLink('/tables')">
-                        <router-link class="nav-link" :to="{ name: 'tables' }"><span class="sr-only">(current)</span>Mesas</router-link>
+                        <router-link class="nav-link" :to="{ name: 'tables' }"><span v-on:click="ocultar()">Mesas</span></router-link>
                     </li>
                     <li class="nav-item" :class="isActiveLink('/sales')">
-                        <router-link class="nav-link" :to="{ name: 'sales' }"><span class="sr-only">(current)</span>Ventas</router-link>
+                        <router-link class="nav-link" :to="{ name: 'sales' }"><span v-on:click="ocultar()">Ventas</span></router-link>
                     </li>
                     <li class="nav-item" :class="isActiveLink('/reports')">
-                        <router-link class="nav-link" :to="{ name: 'reports' }"><span class="sr-only">(current)</span>Reporte de ventas</router-link>
+                        <router-link class="nav-link" :to="{ name: 'reports' }"><span v-on:click="ocultar()">Reportes</span></router-link>
                     </li>
                 </ul>
             </div>  
@@ -30,6 +30,9 @@
         methods:{
             isActiveLink(url){
                 return url == this.$route.path ? 'active':'';
+            },
+            ocultar: function(){
+                $('.navbar-collapse').collapse('hide');
             }
         }
     }

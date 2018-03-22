@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Report;
 use App\Sale;
 use App\Saledetail;
+use App\Food;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ReportController extends Controller
 {
@@ -16,12 +18,51 @@ class ReportController extends Controller
      */
     public function index(Request $request)
     {
+        /*$saleDetails = Saledetail::all();
+        $total = $saleDetails->groupBy('food_id')->transform(function($value, $key){
+            return ['food_id'=>$key, 'cant'=>$value->count()];
+        });
+        return $total->sortByDesc('cant');
+        ///*/
+        //Validando la data
         $data = $request->validate([
             'datefrom' =>'required',
             'dateto' =>'required'
         ]);
-        $sales = Sale::with('table')->whereBetween('created_at', array($request->input('datefrom'), $request->input('dateto')))->get();
-        return $sales;
+        //Convirtiendo las fechas
+        $date1 = new Carbon($request->input('datefrom'));
+        $date2 = new Carbon($request->input('dateto'));
+        //Consultando
+        $salesId = [];
+        $sales = Sale::with('table')->whereBetween('created_at' ,array($date1, $date2->addHours(23)->addMinutes(59)))->get();
+
+        //$sales = Sale::all();
+        foreach ($sales as $sale) {
+            array_push($salesId, $sale->id);
+        }
+        //return $salesId;
+        $saleDetailsFound = [];
+        foreach ($salesId as $saleId) {
+           array_push($saleDetailsFound, Saledetail::where('sale_id', $saleId)->get());
+        }
+        $collectionSaleDetailsFound = collect($saleDetailsFound);
+        $final = $collectionSaleDetailsFound->flatten();
+        $uff = $final->groupBy('food_id')->transform(function($value, $key){
+            return ['food_id'=>$key, 'cant'=>$value->count()];
+        });
+
+        $foodsMostSold = $uff->sortByDesc('cant');
+        $foodsMostSoldFinal = [];
+        foreach ($foodsMostSold as $foodMost) {
+            $foodTemp = Food::where('id', $foodMost['food_id'])->first();
+            array_push($foodsMostSoldFinal, ['name'=>$foodTemp->name, 'cant'=>$foodMost['cant']]);
+        }
+        //return $foodsMostSoldFinal;
+        //return $foodsMostSold;
+        return response()->json(['sales'=>$sales, 'foodsMostSold'=>$foodsMostSoldFinal]);
+
+        
+        
     }
 
     /**
