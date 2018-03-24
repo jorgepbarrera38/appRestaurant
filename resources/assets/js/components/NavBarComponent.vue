@@ -17,7 +17,7 @@
                         <router-link class="nav-link" :to="{ name: 'sales' }"><span v-on:click="ocultar()">Ventas</span></router-link>
                     </li>
                     <li class="nav-item" :class="isActiveLink('/gast')">
-                        <router-link class="nav-link" :to="{ name: 'reports' }"><span v-on:click="ocultar()">Gastos</span></router-link>
+                        <router-link class="nav-link" :to="{ name: 'expends' }"><span v-on:click="ocultar()">Gastos</span></router-link>
                     </li>
                     <li class="nav-item" :class="isActiveLink('/reports')">
                         <router-link class="nav-link" :to="{ name: 'reports' }"><span v-on:click="ocultar()">Reportes</span></router-link>
