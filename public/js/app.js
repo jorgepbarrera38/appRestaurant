@@ -69943,6 +69943,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     methods: {
@@ -70048,6 +70051,34 @@ var render = function() {
                         }
                       },
                       [_vm._v("Ventas")]
+                    )
+                  ]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "li",
+              { staticClass: "nav-item", class: _vm.isActiveLink("/gast") },
+              [
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "nav-link",
+                    attrs: { to: { name: "reports" } }
+                  },
+                  [
+                    _c(
+                      "span",
+                      {
+                        on: {
+                          click: function($event) {
+                            _vm.ocultar()
+                          }
+                        }
+                      },
+                      [_vm._v("Gastos")]
                     )
                   ]
                 )
