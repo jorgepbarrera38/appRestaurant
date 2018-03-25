@@ -6,6 +6,7 @@ use App\Report;
 use App\Sale;
 use App\Saledetail;
 use App\Food;
+use App\Expend;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -57,9 +58,11 @@ class ReportController extends Controller
             $foodTemp = Food::where('id', $foodMost['food_id'])->first();
             array_push($foodsMostSoldFinal, ['name'=>$foodTemp->name, 'cant'=>$foodMost['cant']]);
         }
-        //return $foodsMostSoldFinal;
-        //return $foodsMostSold;
-        return response()->json(['sales'=>$sales, 'foodsMostSold'=>$foodsMostSoldFinal]);
+        //Obteniendo los gastos
+        $date1 = new Carbon($request->input('datefrom'));
+        $date2 = new Carbon($request->input('dateto'));
+        $expends = Expend::where('date','>=',$request->input('datefrom'))->where('date', '<=', $request->input('dateto'))->get();
+        return response()->json(['sales'=>$sales, 'expends'=>$expends]);
 
         
         

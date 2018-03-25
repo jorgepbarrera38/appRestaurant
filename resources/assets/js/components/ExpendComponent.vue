@@ -8,8 +8,7 @@
                         <button v-on:click="showModalNewExpend()" class="btn btn-success btn-sm float-right">Registrar nuevo gasto</button>
                     </div>
                     <div class="card-body">
-                        <template v-if="expends.length<1">No hay registros...</template>
-                        <table class="table table-hover table-sm" v-if="expends.length>0">
+                        <table class="table table-hover table-sm">
                             <thead>
                                 <th>Fecha</th>
                                 <th>Detalle</th>
@@ -59,7 +58,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-primary" v-on:click="saveExpend()">Guardar</button>
-                                    <button class="btn btn-danger">Cancelar</button>
+                                    <button class="btn btn-danger" v-on:click="cancelNewExpend()">Cancelar</button>
                                 </div>
                                 </div>
                             </div>
@@ -80,7 +79,7 @@
       },
       data(){
         return {
-            expends:null,
+            expends:[],
             expend:{
               date:null,
               val:null,
@@ -102,10 +101,9 @@
         },
         saveExpend: function(){
           axios.post('expends', this.expend).then(response=>{
-              $('#modalNewExpend').modal('hide');    
+              this.cancelNewExpend();   
               this.getExpends();
               toastr.success('Gasto registrado');              
-              this.cleanFields();
           }).catch(errors=>{
             this.errors = errors.response.data.errors;
           });
@@ -115,6 +113,10 @@
             this.expend.val=null;
             this.expend.detail=null;
             this.errors = null;
+        },
+        cancelNewExpend: function(){
+          $('#modalNewExpend').modal('hide');    
+          this.cleanFields();
         },
         convertToMoney: function(value){
           return formatNum(value);
