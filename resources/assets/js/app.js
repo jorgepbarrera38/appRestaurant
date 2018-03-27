@@ -9,21 +9,21 @@ require('./bootstrap');
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import TableComponent from './components/TableComponent';
 import SaleComponent from './components/SaleComponent';
 import FoodComponent from './components/FoodComponent';
 import ReportComponent from './components/ReportComponent';
 import ExpendComponent from './components/ExpendComponent';
+import CompanyComponent from './components/CompanyComponent';
 
 
 Vue.use(VueRouter);
 
 const routes = [
-    { path: '/tables', name: 'tables', component: TableComponent },
     { path: '/sales', name: 'sales', component: SaleComponent },
     { path: '/foods', name:'foods', component: FoodComponent },
     { path: '/reports', name: 'reports', component: ReportComponent },
-    { path: '/expends', name: 'expends', component: ExpendComponent }
+    { path: '/expends', name: 'expends', component: ExpendComponent },
+    { path: '/company', name: 'company', component: CompanyComponent }
 ];
 
 const router = new VueRouter({

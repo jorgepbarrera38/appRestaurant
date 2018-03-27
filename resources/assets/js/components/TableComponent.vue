@@ -1,24 +1,17 @@
 <template>
   <div class="container">
       <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-12">
               <div class="card">
-                  <div class="card-header">Mesas 
+                  <div class="card-header">Mesas activas
                       <div class="float-right">
                           <button class="btn btn-success btn-sm" v-on:click="addTableShowForm=true">Agregar mesa</button>
                       </div>
                   </div>
                   <div class="card-body">
-                            <table class="table table-hover table-sm">
-                                <thead>
-                                    <th>Mesas</th>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="table in tables">
-                                        <td>{{ table.name }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <ul class="list-group">
+                                <li class="list-group-item" v-for="table in tables">{{ table.name }}</li>
+                            </ul>
                   </div>
               </div>
           </div>

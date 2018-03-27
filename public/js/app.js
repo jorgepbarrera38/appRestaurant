@@ -30737,16 +30737,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(162);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(165);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_TableComponent__ = __webpack_require__(166);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_TableComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_TableComponent__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_SaleComponent__ = __webpack_require__(170);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_SaleComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_SaleComponent__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_FoodComponent__ = __webpack_require__(179);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_FoodComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_FoodComponent__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_ReportComponent__ = __webpack_require__(182);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_ReportComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_ReportComponent__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_ExpendComponent__ = __webpack_require__(186);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_ExpendComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_ExpendComponent__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_SaleComponent__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_SaleComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_SaleComponent__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_FoodComponent__ = __webpack_require__(179);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_FoodComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_FoodComponent__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_ReportComponent__ = __webpack_require__(182);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_ReportComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_ReportComponent__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_ExpendComponent__ = __webpack_require__(186);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_ExpendComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_ExpendComponent__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_CompanyComponent__ = __webpack_require__(189);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_CompanyComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_CompanyComponent__);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -30766,13 +30766,13 @@ __webpack_require__(140);
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]);
 
-var routes = [{ path: '/tables', name: 'tables', component: __WEBPACK_IMPORTED_MODULE_2__components_TableComponent___default.a }, { path: '/sales', name: 'sales', component: __WEBPACK_IMPORTED_MODULE_3__components_SaleComponent___default.a }, { path: '/foods', name: 'foods', component: __WEBPACK_IMPORTED_MODULE_4__components_FoodComponent___default.a }, { path: '/reports', name: 'reports', component: __WEBPACK_IMPORTED_MODULE_5__components_ReportComponent___default.a }, { path: '/expends', name: 'expends', component: __WEBPACK_IMPORTED_MODULE_6__components_ExpendComponent___default.a }];
+var routes = [{ path: '/sales', name: 'sales', component: __WEBPACK_IMPORTED_MODULE_2__components_SaleComponent___default.a }, { path: '/foods', name: 'foods', component: __WEBPACK_IMPORTED_MODULE_3__components_FoodComponent___default.a }, { path: '/reports', name: 'reports', component: __WEBPACK_IMPORTED_MODULE_4__components_ReportComponent___default.a }, { path: '/expends', name: 'expends', component: __WEBPACK_IMPORTED_MODULE_5__components_ExpendComponent___default.a }, { path: '/company', name: 'company', component: __WEBPACK_IMPORTED_MODULE_6__components_CompanyComponent___default.a }];
 
 var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
     routes: routes
 });
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('navbar-component', __webpack_require__(189));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('navbar-component', __webpack_require__(191));
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
     el: '#app',
@@ -66675,13 +66675,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 
 __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.options.timeOut = 2000;
@@ -66747,10 +66740,10 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-6" }, [
+      _c("div", { staticClass: "col-md-12" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header" }, [
-            _vm._v("Mesas \n                    "),
+            _vm._v("Mesas activas\n                    "),
             _c("div", { staticClass: "float-right" }, [
               _c(
                 "button",
@@ -66768,16 +66761,15 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
-            _c("table", { staticClass: "table table-hover table-sm" }, [
-              _vm._m(0),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(_vm.tables, function(table) {
-                  return _c("tr", [_c("td", [_vm._v(_vm._s(table.name))])])
-                })
-              )
-            ])
+            _c(
+              "ul",
+              { staticClass: "list-group" },
+              _vm._l(_vm.tables, function(table) {
+                return _c("li", { staticClass: "list-group-item" }, [
+                  _vm._v(_vm._s(table.name))
+                ])
+              })
+            )
           ])
         ])
       ]),
@@ -66869,14 +66861,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [_c("th", [_vm._v("Mesas")])])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -70414,9 +70399,106 @@ if (false) {
 var disposed = false
 var normalizeComponent = __webpack_require__(2)
 /* script */
-var __vue_script__ = __webpack_require__(190)
+var __vue_script__ = __webpack_require__(194)
 /* template */
-var __vue_template__ = __webpack_require__(191)
+var __vue_template__ = __webpack_require__(190)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\CompanyComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-39bd1477", Component.options)
+  } else {
+    hotAPI.reload("data-v-39bd1477", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 190 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-4" }, [_c("TableComponent")], 1)
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-8" }, [
+      _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card-header" }, [
+          _vm._v("\n                    Datos\n                ")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c("div", { staticClass: "for-group" }, [
+            _c("label", { attrs: { for: "" } }, [_vm._v("Razón social")]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: { type: "text" }
+            })
+          ])
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-39bd1477", module.exports)
+  }
+}
+
+/***/ }),
+/* 191 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(192)
+/* template */
+var __vue_template__ = __webpack_require__(193)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -70455,7 +70537,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 190 */
+/* 192 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -70504,7 +70586,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 191 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -70542,34 +70624,6 @@ var render = function() {
                         }
                       },
                       [_vm._v("Productos")]
-                    )
-                  ]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "li",
-              { staticClass: "nav-item", class: _vm.isActiveLink("/tables") },
-              [
-                _c(
-                  "router-link",
-                  {
-                    staticClass: "nav-link",
-                    attrs: { to: { name: "tables" } }
-                  },
-                  [
-                    _c(
-                      "span",
-                      {
-                        on: {
-                          click: function($event) {
-                            _vm.ocultar()
-                          }
-                        }
-                      },
-                      [_vm._v("Mesas")]
                     )
                   ]
                 )
@@ -70656,6 +70710,34 @@ var render = function() {
                 )
               ],
               1
+            ),
+            _vm._v(" "),
+            _c(
+              "li",
+              { staticClass: "nav-item", class: _vm.isActiveLink("/company") },
+              [
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "nav-link",
+                    attrs: { to: { name: "company" } }
+                  },
+                  [
+                    _c(
+                      "span",
+                      {
+                        on: {
+                          click: function($event) {
+                            _vm.ocultar()
+                          }
+                        }
+                      },
+                      [_vm._v("Empresa")]
+                    )
+                  ]
+                )
+              ],
+              1
             )
           ])
         ]
@@ -70695,6 +70777,44 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-0404be46", module.exports)
   }
 }
+
+/***/ }),
+/* 194 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TableComponent__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TableComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__TableComponent__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    components: {
+        TableComponent: __WEBPACK_IMPORTED_MODULE_0__TableComponent___default.a
+    }
+});
 
 /***/ })
 /******/ ]);

@@ -10,9 +10,6 @@
                     <li class="nav-item" :class="isActiveLink('/foods')">
                         <router-link class="nav-link" :to="{ name: 'foods' }"><span v-on:click="ocultar()">Productos</span></router-link>
                     </li>
-                    <li class="nav-item" :class="isActiveLink('/tables')">
-                        <router-link class="nav-link" :to="{ name: 'tables' }"><span v-on:click="ocultar()">Mesas</span></router-link>
-                    </li>
                     <li class="nav-item" :class="isActiveLink('/sales')">
                         <router-link class="nav-link" :to="{ name: 'sales' }"><span v-on:click="ocultar()">Ventas</span></router-link>
                     </li>
@@ -21,6 +18,9 @@
                     </li>
                     <li class="nav-item" :class="isActiveLink('/reports')">
                         <router-link class="nav-link" :to="{ name: 'reports' }"><span v-on:click="ocultar()">Reportes</span></router-link>
+                    </li>
+                    <li class="nav-item" :class="isActiveLink('/company')">
+                        <router-link class="nav-link" :to="{ name: 'company' }"><span v-on:click="ocultar()">Empresa</span></router-link>
                     </li>
                 </ul>
             </div>  
