@@ -9,7 +9,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <form class="form-inline" v-on:submit.prevent="findResults()">
+                                <form class="form-inline" v-on:submit.prevent="find()">
                                     <div class="form-row align-items-center">
                                         <div class="col-auto">
                                             <input type="date" name="bdaytime" v-model="dateFrom" class="form-control mb-2" id="inlineFormInput">
@@ -22,17 +22,24 @@
                                         <button class="btn btn-primary mb-2" type="submit">Buscar</button>
                                     </div>
                                 </form>
+                                
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12" v-if="showChargin">
+                            <div class="col-md-12" v-if="charginResults">
                                 <div class="alert alert-success">
                                     Cargando...
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <!--Listado de ventas-->
-                            <div class="col-md-12" v-if="sales.length>0">
-                                    <div class="card">
+                            <div class="col-md-6">
+                                <div class="alert alert-danger" v-if="showBlanckSales">
+                                    No hay ventas registrados.
+                                </div>
+                                    <div v-if="sales.length>0">
+                                    <div class="card"  style="height: 34rem;">
                                         <div class="card-header">
                                             Ventas
                                             <div class="float-right">
@@ -79,8 +86,7 @@
                                                     </table>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                                 </div>
                                                 </div>
                                             </div>
@@ -89,10 +95,14 @@
                                         </div>
                                 </div>
                                 <br>
+                                </div>
                             </div>
                             <!--Listado de gastos-->
-                            <div class="col-md-12" v-if="expends.length>0">
-                                <div class="card">
+                            <div class="col-md-6" >
+                                <div class="alert alert-danger" v-if="showBlanckExpends">
+                                    No hay gastos registrados.
+                                </div>
+                                <div class="card" v-if="expends.length>0"  style="height: 34rem;">
                                     <div class="card-header">
                                         Gastos
                                         <div class="float-right">
@@ -100,7 +110,7 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <table class="table table-hover table-sm" v-if="expends.length>1">
+                                        <table class="table table-hover table-sm">
                                             <thead>
                                                 <th>Fecha</th>
                                                 <th>Detalle</th>
@@ -110,7 +120,7 @@
                                                 <tr v-for="expend in expends">
                                                     <td>{{ convertDate(expend.date) }}</td>
                                                     <td>{{ expend.detail }}</td>
-                                                    <td>{{ expend.val }}</td>
+                                                    <td>${{ convertToMoney(expend.val) }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -138,9 +148,53 @@
                 saleDetails:[],
                 expends:[],
                 showChargin:false,
+                showBlanckExpends:false,
+                showBlanckSales:false,
+                charginResults:false,
             }
         },
         methods: {
+            find: function(){
+                this.charginResults=true;
+                this.sales=[];
+                this.expends=[];
+                this.showBlanckExpends=false;
+                this.showBlanckSales=false;
+                if(this.dateFrom && this.dateTo){
+                    if(this.dateFrom > this.dateTo){
+                        toastr.error("Las fechas no tienen un formato correcto");
+                        this.charginResults=false;
+                    }else{
+                        this.findSales();
+                        this.findExpends();
+                    }
+                }else{
+                    toastr.error("Debe especificar un rango de fechas");
+                    this.charginResults=false;
+                }
+            },
+            findSales: function(){  
+                axios.get('reports/sales?datefrom='+this.dateFrom+'&dateto='+this.dateTo).then(response=>{
+                    this.sales = response.data.data;
+                    if(this.sales.length<1){
+                        this.showBlanckSales=true;
+                    }else{
+                        this.showBlanckSales=false;
+                    }
+                    this.charginResults=false;
+                });
+            },
+            findExpends: function(){
+                axios.get('reports/expends?datefrom='+this.dateFrom+'&dateto='+this.dateTo).then(response=>{
+                    this.expends = response.data;
+                    console.log(this.expends);
+                    if(this.expends.length<1){
+                        this.showBlanckExpends=true;
+                    }else{
+                        this.showBlanckExpends=false;
+                    }
+                });
+            },  
             findResults: function(){
                 this.showChargin=true;
                 this.sales = [];

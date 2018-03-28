@@ -183,7 +183,7 @@
         },
         methods: {
             getTables: function(){
-                axios.get('tables').then(response=>{
+                axios.get('sales/gettables').then(response=>{
                     this.tables = response.data;
                     if(this.foodAdd){
                         toastr.success('Comida añadida');

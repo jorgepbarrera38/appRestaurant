@@ -12,6 +12,10 @@ use App\Saledetail;
 
 class SaleController extends Controller
 {
+    public function getTables(){
+        $tables = Table::with('foodtabletemps.food')->where('active', true)->get();
+        return $tables;
+    }
     public function getfoods(Request $request){
         $nameFind = $request['name'];
         return Food::name($nameFind)->paginate(6);

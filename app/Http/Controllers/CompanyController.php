@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Table;
+use App\Company;
 use Illuminate\Http\Request;
 
-class TableController extends Controller
+class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class TableController extends Controller
      */
     public function index()
     {
-        $tables = Table::all();
-        return $tables;        
+        $company = Company::first();
+        return $company;
     }
 
     /**
@@ -36,21 +36,16 @@ class TableController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|unique:tables'
-        ], [], [
-            'name' => '"Nombre de la mesa"'
-        ]);
-        Table::create($data);
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Table  $table
+     * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function show(Table $table)
+    public function show(Company $company)
     {
         //
     }
@@ -58,10 +53,10 @@ class TableController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Table  $table
+     * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function edit(Table $table)
+    public function edit(Company $company)
     {
         //
     }
@@ -70,28 +65,22 @@ class TableController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Table  $table
+     * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Table $table)
+    public function update(Request $request, Company $company)
     {
-        Table::findOrFail($table->id)->update([
-            'state' => 'inactive'
-        ]);
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Table  $table
+     * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Table $table)
+    public function destroy(Company $company)
     {
-        if($table->active){
-            $table->update(['active'=>false]);
-        }else{
-            $table->update(['active'=>true]);
-        }
+        //
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Table extends Model
 {
-    protected $fillable = [ 'name', 'state' ];
+    protected $fillable = [ 'name', 'state', 'active'];
     
     public function foodtabletemps(){
         return $this->hasMany('App\Foodtabletemp');

@@ -3,36 +3,51 @@
       <div class="row">
           <div class="col-md-12">
               <div class="card">
-                  <div class="card-header">Mesas activas
+                  <div class="card-header">Mesas
                       <div class="float-right">
-                          <button class="btn btn-success btn-sm" v-on:click="addTableShowForm=true">Agregar mesa</button>
+                          <button class="btn btn-success btn-sm" v-on:click="showModalCreateTable()">Agregar mesa</button>
                       </div>
                   </div>
                   <div class="card-body">
                             <ul class="list-group">
-                                <li class="list-group-item" v-for="table in tables">{{ table.name }}</li>
+                                <a class="list-group-item list-group-item-action" v-for="table in tables">
+                                    {{ table.name }}
+                                    <button class="btn btn-danger btn-sm float-right" v-on:click="desactivateTable(table.id)" v-if="table.active">Inhabilitar</button>
+                                    <button class="btn btn-primary btn-sm float-right" v-else v-on:click="desactivateTable(table.id)">Habilitar</button>
+                                </a>
                             </ul>
                   </div>
               </div>
           </div>
-          <div class="col-md-6" v-if="addTableShowForm">
-              <div class="card">
-                  <div class="card-header">Nueva mesa</div>
-                  <div class="card-body">
-                        <form v-on:submit.prevent="addTable()"> 
-                            <div class="alert alert-danger" v-if="errors">
-                                <li v-for="error in errors">{{ error[0] }}</li>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Nombre de la mesa</label>
-                                <input type="text" class="form-control" v-model="table">
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
-                            <a href="" class="btn btn-danger btn-sm" v-on:click.prevent="hideFormNewTable()">Cerrar</a>
-                        </form>         
-                  </div>
-              </div>
-          </div>
+          <!--Modal create Tables-->
+            <div class="modal fade" id="ModalCreateTable" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Crear mesa</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form v-on:submit.prevent="addTable()"> 
+                                <div class="alert alert-danger" v-if="errors">
+                                    <li v-for="error in errors">{{ error[0] }}</li>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Nombre de la mesa</label>
+                                    <input type="text" class="form-control" v-model="table">
+                                </div>
+                            </form>  
+                        </div>
+                        <div class="modal-footer">
+                            <button v-on:click="addTable()" class="btn btn-primary">Guardar</button>
+                            <button v-on:click="hideModalCreateTable()" class="btn btn-danger">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          <!--Fin Modal create Tables-->
       </div>
   </div>
 </template>
@@ -60,19 +75,27 @@
             addTable: function(){
                 axios.post('tables', { name: this.table }).then(response=>{
                     this.getTables();
-                    this.cleanFieldsAndErrors();
+                    this.hideModalCreateTable();
                     toastr.success('Mesa agregada');
                 }).catch(errors=>{
                     this.errors = errors.response.data.errors;
                 });
             },
-            hideFormNewTable: function(){
-                this.addTableShowForm=false;
+            showModalCreateTable: function(){
+                $('#ModalCreateTable').modal('show');
+            },
+            hideModalCreateTable: function(){
+                $('#ModalCreateTable').modal('hide');
                 this.cleanFieldsAndErrors();
             },
             cleanFieldsAndErrors: function(){
                 this.table = '';
                 this.errors = null;
+            },
+            desactivateTable: function(tableId){
+                axios.delete('tables/'+tableId).then(response=>{
+                    this.getTables();
+                });
             }
         }
     }

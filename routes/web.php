@@ -17,9 +17,13 @@ Route::get('/', function () {
 Route::resource('foods', 'FoodController');
 Route::resource('tables', 'TableController');
 
+Route::get('sales/gettables', 'SaleController@getTables');
 Route::get('sales/getfoods', 'SaleController@getfoods');
 Route::post('sales/paynow', 'SaleController@paynow');
 Route::resource('sales', 'SaleController');
 Route::post('pay', 'SaleController@pay');
+Route::get('reports/expends', 'ReportController@expends');
+Route::get('reports/sales', 'ReportController@sales');
 Route::resource('reports', 'ReportController');
 Route::resource('expends', 'ExpendController');
+Route::resource('company', 'CompanyController');

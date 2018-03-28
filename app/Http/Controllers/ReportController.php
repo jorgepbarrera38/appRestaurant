@@ -63,9 +63,30 @@ class ReportController extends Controller
         $date2 = new Carbon($request->input('dateto'));
         $expends = Expend::where('date','>=',$request->input('datefrom'))->where('date', '<=', $request->input('dateto'))->get();
         return response()->json(['sales'=>$sales, 'expends'=>$expends]);
-
-        
-        
+    }
+    public function sales(Request $request){
+        $data = $request->validate([
+            'datefrom' =>'required',
+            'dateto' =>'required'
+        ]);
+        //Convirtiendo las fechas
+        $date1 = new Carbon($request->input('datefrom'));
+        $date2 = new Carbon($request->input('dateto'));
+        //Consultando
+        $salesId = [];
+        $sales = Sale::with('table')->whereBetween('created_at' ,array($date1, $date2->addHours(23)->addMinutes(59)))->paginate(13);
+        return $sales;
+    }
+    public function expends(Request $request){
+        $data = $request->validate([
+            'datefrom' =>'required',
+            'dateto' =>'required'
+        ]);
+        //Obteniendo los gastos
+        $date1 = new Carbon($request->input('datefrom'));
+        $date2 = new Carbon($request->input('dateto'));
+        $expends = Expend::where('date','>=',$request->input('datefrom'))->where('date', '<=', $request->input('dateto'))->get();
+        return $expends;
     }
 
     /**
