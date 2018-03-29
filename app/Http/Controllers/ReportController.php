@@ -72,10 +72,15 @@ class ReportController extends Controller
         //Convirtiendo las fechas
         $date1 = new Carbon($request->input('datefrom'));
         $date2 = new Carbon($request->input('dateto'));
+
+        $salesPriceTotal = Sale::with('table')->whereBetween('created_at' ,array($date1, $date2->addHours(23)->addMinutes(59)))->get();
+        $total = 0;
+        foreach ($salesPriceTotal as $sale) {
+            $total += $sale->pricetotal;
+        }
         //Consultando
-        $salesId = [];
-        $sales = Sale::with('table')->whereBetween('created_at' ,array($date1, $date2->addHours(23)->addMinutes(59)))->paginate(13);
-        return $sales;
+        $sales = Sale::with('table')->whereBetween('created_at' ,array($date1, $date2->addHours(23)->addMinutes(59)))->paginate(8);
+        return response()->json(['sales'=>$sales, 'total'=>$total],200);
     }
     public function expends(Request $request){
         $data = $request->validate([
@@ -85,8 +90,13 @@ class ReportController extends Controller
         //Obteniendo los gastos
         $date1 = new Carbon($request->input('datefrom'));
         $date2 = new Carbon($request->input('dateto'));
-        $expends = Expend::where('date','>=',$request->input('datefrom'))->where('date', '<=', $request->input('dateto'))->get();
-        return $expends;
+        $total = 0;
+        $expendsPriceTotal = Expend::where('date','>=',$request->input('datefrom'))->where('date', '<=', $request->input('dateto'))->get();
+        foreach($expendsPriceTotal as $expend){
+            $total += $expend->val;
+        }
+        $expends = Expend::where('date','>=',$request->input('datefrom'))->where('date', '<=', $request->input('dateto'))->paginate(8);
+        return response()->json(['expends'=>$expends, 'total'=>$total], 200);
     }
 
     /**

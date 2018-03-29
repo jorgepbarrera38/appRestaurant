@@ -1,11 +1,13 @@
 <template>
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
+            <!--d
             <div class="col-md-12">
                 <button class="btn btn-success btn-sm" v-on:click="getTables(); showSuccess()">Actualizar</button>
             </div><br><br>
+            -->
             <!--Listado de mesas-->
-            <div class="col-lg-3 col-md-6 col-sm-12" v-for="(table, index) in tables">
+            <div class="col-lg-4 col-md-6 col-sm-12" v-for="(table, index) in tables">
                 <div class="card" style="height: 13rem;">
                     <div class="card-header">
                         {{ table.name }} 

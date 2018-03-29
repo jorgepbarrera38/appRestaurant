@@ -39,25 +39,25 @@
                                     No hay ventas registrados.
                                 </div>
                                     <div v-if="sales.length>0">
-                                    <div class="card"  style="height: 34rem;">
+                                    <div class="card" style="height: 28rem;">
                                         <div class="card-header">
                                             Ventas
                                             <div class="float-right">
-                                                Total: <strong>${{ convertToMoney(calculateTotalSales) }}</strong>
+                                                Total: <strong>${{ convertToMoney(saleTotal) }}</strong>
                                             </div>
                                             </div>
                                         <div class="card-body">
                                             <table class="table table-hover table-sm">
                                                 <thead>
+                                                    <th>Fecha</th>
                                                     <th>Mesa</th>
                                                     <th>Venta</th>
-                                                    <th>Fecha</th>
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="sale in sales" v-on:click="showDetailsSale(sale.id)">
+                                                        <td>{{ convertDate(sale.created_at) }}</td>
                                                         <td>{{ sale.table.name }}</td>
                                                         <td>${{ convertToMoney(sale.pricetotal) }}</td>
-                                                        <td>{{ convertDate(sale.created_at) }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -93,6 +93,15 @@
                                             </div>
                                             <!--Modal DetailsSale-->
                                         </div>
+                                <div class="card-footer">
+                                    <div class="float-right">
+                                        Página {{ pagination.currentPage }} de {{ pagination.lastPage }}
+                                        <button class="btn btn-primary btn-sm" v-if="pagination.currentPage>1" v-on:click="pagination.currentPage -=1;findSales()">Atrás</button>
+                                        <button class="btn btn-primary btn-sm disabled" v-else>Atrás</button>
+                                        <button class="btn btn-primary btn-sm" v-if="pagination.currentPage<pagination.lastPage" v-on:click="pagination.currentPage +=1;findSales()">Adelante</button>
+                                        <button class="btn btn-primary btn-sm disabled" v-else>Adelante</button>
+                                    </div>
+                                </div>
                                 </div>
                                 <br>
                                 </div>
@@ -102,11 +111,11 @@
                                 <div class="alert alert-danger" v-if="showBlanckExpends">
                                     No hay gastos registrados.
                                 </div>
-                                <div class="card" v-if="expends.length>0"  style="height: 34rem;">
+                                <div class="card" v-if="expends.length>0"  style="height: 24rem;">
                                     <div class="card-header">
                                         Gastos
                                         <div class="float-right">
-                                            Total: <strong>${{ convertToMoney(calculateTotalExpends) }}</strong>
+                                            Total: <strong>${{ convertToMoney(expendTotal) }}</strong>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -151,6 +160,12 @@
                 showBlanckExpends:false,
                 showBlanckSales:false,
                 charginResults:false,
+                saleTotal:0,
+                expendTotal:0,
+                pagination:{
+                    currentPage:'',
+                    lastPage:''
+                },
             }
         },
         methods: {
@@ -160,6 +175,8 @@
                 this.expends=[];
                 this.showBlanckExpends=false;
                 this.showBlanckSales=false;
+                this.pagination.currentPage='';
+                this.pagination.lastPage='';
                 if(this.dateFrom && this.dateTo){
                     if(this.dateFrom > this.dateTo){
                         toastr.error("Las fechas no tienen un formato correcto");
@@ -174,8 +191,12 @@
                 }
             },
             findSales: function(){  
-                axios.get('reports/sales?datefrom='+this.dateFrom+'&dateto='+this.dateTo).then(response=>{
-                    this.sales = response.data.data;
+                axios.get('reports/sales?page='+ this.pagination.currentPage +'&datefrom='+this.dateFrom+'&dateto='+this.dateTo).then(response=>{
+                    this.sales = response.data.sales.data;
+                    this.saleTotal = response.data.total;
+                    this.pagination.currentPage = response.data.sales.current_page;
+                    this.pagination.lastPage = response.data.sales.last_page;
+                    console.log(response.data);
                     if(this.sales.length<1){
                         this.showBlanckSales=true;
                     }else{
@@ -186,8 +207,8 @@
             },
             findExpends: function(){
                 axios.get('reports/expends?datefrom='+this.dateFrom+'&dateto='+this.dateTo).then(response=>{
-                    this.expends = response.data;
-                    console.log(this.expends);
+                    this.expends = response.data.expends.data;
+                    this.expendTotal = response.data.total;
                     if(this.expends.length<1){
                         this.showBlanckExpends=true;
                     }else{
@@ -200,7 +221,6 @@
                 this.sales = [];
                 this.expends = [];
                 axios.get('reports?datefrom='+this.dateFrom+'&dateto='+this.dateTo).then(response=>{
-                    console.log(this.dateFrom);
                    this.sales = response.data.sales;
                    this.expends = response.data.expends;
                    this.showChargin=false;
@@ -222,26 +242,6 @@
             },
             convertDate: function(value){
                 return moment(value).format('MMMM Do YYYY, h:mm:ss a');
-            }
-        },
-        computed:{
-            calculateTotalSales: function(){
-                var total = 0;
-                if(this.sales.length>0){
-                    this.sales.forEach(element => {
-                        total += Number(element.pricetotal);
-                    });
-                }
-                return total;
-            },
-            calculateTotalExpends: function(){
-                var total = 0;
-                if(this.expends.length>0){
-                    this.expends.forEach(element=>{
-                        total+=Number(element.val);
-                    }); 
-                }
-                return total;
             }
         }
     }

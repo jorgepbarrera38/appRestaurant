@@ -94,4 +94,7 @@ class TableController extends Controller
             $table->update(['active'=>true]);
         }
     }
+    public function deletetable($table){
+        $tabla = Table::findOrFail($table)->delete();
+    }
 }

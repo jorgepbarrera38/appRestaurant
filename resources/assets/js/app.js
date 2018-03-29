@@ -11,7 +11,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import SaleComponent from './components/SaleComponent';
 import FoodComponent from './components/FoodComponent';
-import ReportComponent from './components/ReportComponent';
+import ReportUtilityComponent from './components/ReportUtilityComponent';
 import ExpendComponent from './components/ExpendComponent';
 import CompanyComponent from './components/CompanyComponent';
 
@@ -21,7 +21,7 @@ Vue.use(VueRouter);
 const routes = [
     { path: '/sales', name: 'sales', component: SaleComponent },
     { path: '/foods', name:'foods', component: FoodComponent },
-    { path: '/reports', name: 'reports', component: ReportComponent },
+    { path: '/reports/utility', name: 'reports.utility', component: ReportUtilityComponent },
     { path: '/expends', name: 'expends', component: ExpendComponent },
     { path: '/company', name: 'company', component: CompanyComponent }
 ];

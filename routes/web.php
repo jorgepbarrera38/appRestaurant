@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::resource('foods', 'FoodController');
+Route::delete('tables/{id}/delete', 'TableController@deletetable');
 Route::resource('tables', 'TableController');
 
 Route::get('sales/gettables', 'SaleController@getTables');

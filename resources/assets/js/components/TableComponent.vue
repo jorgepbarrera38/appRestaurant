@@ -12,8 +12,11 @@
                             <ul class="list-group">
                                 <a class="list-group-item list-group-item-action" v-for="table in tables">
                                     {{ table.name }}
-                                    <button class="btn btn-danger btn-sm float-right" v-on:click="desactivateTable(table.id)" v-if="table.active">Inhabilitar</button>
-                                    <button class="btn btn-primary btn-sm float-right" v-else v-on:click="desactivateTable(table.id)">Habilitar</button>
+                                    <div class="float-right">
+                                        <button class="btn btn-warning btn-sm" v-on:click="desactivateTable(table.id)" v-if="table.active">Inhabilitar</button>
+                                        <button class="btn btn-primary btn-sm" v-else v-on:click="desactivateTable(table.id)">Habilitar</button>
+                                        <button class="btn btn-danger btn-sm" v-on:click="deleteTable(table.id)">Eliminar</button>
+                                    </div>
                                 </a>
                             </ul>
                   </div>
@@ -36,7 +39,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">Nombre de la mesa</label>
-                                    <input type="text" class="form-control" v-model="table">
+                                    <input type="text" class="form-control" v-model="table" id="nameTable">
                                 </div>
                             </form>  
                         </div>
@@ -91,6 +94,15 @@
             cleanFieldsAndErrors: function(){
                 this.table = '';
                 this.errors = null;
+            },
+            
+            deleteTable: function(tableId){
+                axios.delete('tables/'+tableId+'/delete').then(response=>{
+                    this.getTables();
+                    toastr.success('Mesa eliminada');
+                }).catch(errors=>{
+                    toastr.error('Ocurrió un error al intentar eliminar la mesa, si la mesa ya tiene ventas no la puede eliminar');
+                });
             },
             desactivateTable: function(tableId){
                 axios.delete('tables/'+tableId).then(response=>{

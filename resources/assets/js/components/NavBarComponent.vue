@@ -17,7 +17,18 @@
                         <router-link class="nav-link" :to="{ name: 'expends' }"><span v-on:click="ocultar()">Gastos</span></router-link>
                     </li>
                     <li class="nav-item" :class="isActiveLink('/reports')">
-                        <router-link class="nav-link" :to="{ name: 'reports' }"><span v-on:click="ocultar()">Reportes</span></router-link>
+                        
+                    </li>
+                    <li class="nav-item dropdown" :class="isActiveLink('/reports/utility')">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Reportes
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <router-link class="dropdown-item" :to="{ name: 'reports.utility' }"><span v-on:click="ocultar()">Reportes de utilidad</span></router-link>
+                            <router-link class="dropdown-item" :to="{ name: 'reports.utility' }"><span v-on:click="ocultar()">Los más vendidos</span></router-link>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
                     </li>
                     <li class="nav-item" :class="isActiveLink('/company')">
                         <router-link class="nav-link" :to="{ name: 'company' }"><span v-on:click="ocultar()">Empresa</span></router-link>
