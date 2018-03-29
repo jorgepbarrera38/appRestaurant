@@ -34,7 +34,7 @@
                         </div>
                         <div class="row">
                             <!--Listado de ventas-->
-                            <div class="col-md-6">
+                            <div class="col-lg-6 col-md-12">
                                 <div class="alert alert-danger" v-if="showBlanckSales">
                                     No hay ventas registrados.
                                 </div>
@@ -93,25 +93,25 @@
                                             </div>
                                             <!--Modal DetailsSale-->
                                         </div>
-                                <div class="card-footer">
-                                    <div class="float-right">
-                                        Página {{ pagination.currentPage }} de {{ pagination.lastPage }}
-                                        <button class="btn btn-primary btn-sm" v-if="pagination.currentPage>1" v-on:click="pagination.currentPage -=1;findSales()">Atrás</button>
-                                        <button class="btn btn-primary btn-sm disabled" v-else>Atrás</button>
-                                        <button class="btn btn-primary btn-sm" v-if="pagination.currentPage<pagination.lastPage" v-on:click="pagination.currentPage +=1;findSales()">Adelante</button>
-                                        <button class="btn btn-primary btn-sm disabled" v-else>Adelante</button>
-                                    </div>
-                                </div>
+                                        <div class="card-footer">
+                                            <div class="float-right">
+                                                Página {{ pagination.currentPage }} de {{ pagination.lastPage }}
+                                                <button class="btn btn-primary btn-sm" v-if="pagination.currentPage>1" v-on:click="pagination.currentPage -=1;findSales()">Atrás</button>
+                                                <button class="btn btn-primary btn-sm disabled" v-else>Atrás</button>
+                                                <button class="btn btn-primary btn-sm" v-if="pagination.currentPage<pagination.lastPage" v-on:click="pagination.currentPage +=1;findSales()">Adelante</button>
+                                                <button class="btn btn-primary btn-sm disabled" v-else>Adelante</button>
+                                            </div>
+                                        </div>
                                 </div>
                                 <br>
                                 </div>
                             </div>
                             <!--Listado de gastos-->
-                            <div class="col-md-6" >
+                            <div class="col-lg-6 col-md-12" >
                                 <div class="alert alert-danger" v-if="showBlanckExpends">
                                     No hay gastos registrados.
                                 </div>
-                                <div class="card" v-if="expends.length>0"  style="height: 24rem;">
+                                <div class="card" v-if="expends.length>0"  style="height: 28rem;">
                                     <div class="card-header">
                                         Gastos
                                         <div class="float-right">
@@ -127,12 +127,21 @@
                                             </thead>
                                             <tbody>
                                                 <tr v-for="expend in expends">
-                                                    <td>{{ convertDate(expend.date) }}</td>
+                                                    <td>{{ convertDateForExpends(expend.date) }}</td>
                                                     <td>{{ expend.detail }}</td>
                                                     <td>${{ convertToMoney(expend.val) }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="float-right">
+                                            Página {{ paginationExpends.currentPage }} de {{ paginationExpends.lastPage }}
+                                            <button class="btn btn-primary btn-sm" v-if="paginationExpends.currentPage>1" v-on:click="paginationExpends.currentPage -=1;findExpends()">Atrás</button>
+                                            <button class="btn btn-primary btn-sm disabled" v-else>Atrás</button>
+                                            <button class="btn btn-primary btn-sm" v-if="paginationExpends.currentPage<paginationExpends.lastPage" v-on:click="paginationExpends.currentPage +=1;findExpends()">Adelante</button>
+                                            <button class="btn btn-primary btn-sm disabled" v-else>Adelante</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -166,6 +175,10 @@
                     currentPage:'',
                     lastPage:''
                 },
+                paginationExpends:{
+                    currentPage:'',
+                    lastPage:''
+                }
             }
         },
         methods: {
@@ -196,7 +209,6 @@
                     this.saleTotal = response.data.total;
                     this.pagination.currentPage = response.data.sales.current_page;
                     this.pagination.lastPage = response.data.sales.last_page;
-                    console.log(response.data);
                     if(this.sales.length<1){
                         this.showBlanckSales=true;
                     }else{
@@ -206,9 +218,12 @@
                 });
             },
             findExpends: function(){
-                axios.get('reports/expends?datefrom='+this.dateFrom+'&dateto='+this.dateTo).then(response=>{
+                axios.get('reports/expends?page='+ this.paginationExpends.currentPage +'&datefrom='+this.dateFrom+'&dateto='+this.dateTo).then(response=>{
+                    console.log(response.data);
                     this.expends = response.data.expends.data;
                     this.expendTotal = response.data.total;
+                    this.paginationExpends.currentPage = response.data.expends.current_page;
+                    this.paginationExpends.lastPage = response.data.expends.last_page;
                     if(this.expends.length<1){
                         this.showBlanckExpends=true;
                     }else{
@@ -242,6 +257,9 @@
             },
             convertDate: function(value){
                 return moment(value).format('MMMM Do YYYY, h:mm:ss a');
+            },
+            convertDateForExpends: function(value){
+                return moment(value).format('MMMM Do YYYY');
             }
         }
     }

@@ -14,7 +14,7 @@ class ExpendController extends Controller
      */
     public function index()
     {   
-        $expends = Expend::orderBy('id', 'DESC')->get();
+        $expends = Expend::orderBy('id', 'DESC')->paginate(13);
         return $expends;
     }
 

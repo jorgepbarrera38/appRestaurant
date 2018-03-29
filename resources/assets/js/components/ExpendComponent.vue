@@ -91,7 +91,7 @@
       methods:{
         getExpends: function(){
           axios.get('expends').then(response=>{
-            this.expends = response.data;
+            this.expends = response.data.data;
           }).catch(errors=>{
             toastr.error('Ha ocurrido un error al llamar los gastos');
           });
