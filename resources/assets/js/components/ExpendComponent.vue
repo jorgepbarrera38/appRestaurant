@@ -8,20 +8,22 @@
                         <button v-on:click="showModalNewExpend()" class="btn btn-success btn-sm float-right">Registrar nuevo gasto</button>
                     </div>
                     <div class="card-body">
-                        <table class="table table-hover table-sm">
-                            <thead>
-                                <th>Fecha</th>
-                                <th>Detalle</th>
-                                <th>Valor</th>
-                            </thead>
-                            <tbody>
-                                <tr v-for="expend in expends">
-                                    <td>{{ expend.date }}</td>
-                                    <td>{{ expend.detail }}</td>
-                                    <td>${{ convertToMoney(expend.val) }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm">
+                                <thead>
+                                    <th>Fecha</th>
+                                    <th>Detalle</th>
+                                    <th>Valor</th>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="expend in expends">
+                                        <td nowrap>{{ convertDate(expend.date) }}</td>
+                                        <td nowrap>{{ expend.detail }}</td>
+                                        <td nowrap>${{ convertToMoney(expend.val) }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <!-- Modal create Expend -->
                         <div class="modal fade" id="modalNewExpend" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -73,6 +75,7 @@
 <script>
   import toastr from 'toastr';
   import formatNum from 'format-num';
+  import moment from 'moment';
   export default {
       mounted: function(){
         this.getExpends();
@@ -120,6 +123,9 @@
         },
         convertToMoney: function(value){
           return formatNum(value);
+        },
+        convertDate: function(date){
+            return moment(date).format('MMMM Do YYYY');
         }
       }
   }

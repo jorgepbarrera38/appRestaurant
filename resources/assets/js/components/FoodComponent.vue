@@ -14,16 +14,13 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form class="form-inline" v-on:submit.prevent="addFind()">
-                             <div class="form-row align-items-center">
-                                <div class="col-auto">
-                                    <input type="text" class="form-control mb-2" id="inlineFormInput" placeholder="Buscar coincidencias" v-model="findTemp">
-                                </div>
-                             </div>
-                             <div class="col-auto">
-                                <button type="submit" class="btn btn-primary mb-2">Buscar</button>
-                            </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <form v-on:submit.prevent="addFind()">
+                            <input type="text" class="form-control mb-2" id="inlineFormInput" placeholder="Buscar coincidencias" v-model="findTemp">
                         </form>
+                            </div>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-hover table-sm">
                                 <thead>
