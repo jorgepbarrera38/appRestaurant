@@ -67606,6 +67606,18 @@ var render = function() {
                                 domProps: { value: _vm.find },
                                 on: {
                                   keyup: function($event) {
+                                    if (
+                                      !("button" in $event) &&
+                                      _vm._k(
+                                        $event.keyCode,
+                                        "enter",
+                                        13,
+                                        $event.key,
+                                        "Enter"
+                                      )
+                                    ) {
+                                      return null
+                                    }
                                     _vm.getFoods()
                                   },
                                   input: function($event) {
@@ -68188,6 +68200,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -68422,57 +68436,61 @@ var render = function() {
               ]
             ),
             _vm._v(" "),
-            _c("table", { staticClass: "table table-hover table-sm" }, [
-              _vm._m(1),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(_vm.foods, function(food) {
-                  return _c("tr", [
-                    _c("td", [_vm._v(_vm._s(food.name))]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _vm._v(_vm._s(food.description.substring(0, 90)))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _vm._v("$" + _vm._s(_vm.convertMoney(food.price)))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c("button", { staticClass: "btn btn-info btn-sm" }, [
-                        _vm._v("Ver")
+            _c("div", { staticClass: "table-responsive" }, [
+              _c("table", { staticClass: "table table-hover table-sm" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.foods, function(food) {
+                    return _c("tr", [
+                      _c("td", { attrs: { nowrap: "" } }, [
+                        _vm._v(_vm._s(food.name))
                       ]),
                       _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-warning btn-sm",
-                          on: {
-                            click: function($event) {
-                              _vm.editFood(food.id)
-                            }
-                          }
-                        },
-                        [_vm._v("Editar")]
-                      ),
+                      _c("td", { attrs: { nowrap: "" } }, [
+                        _vm._v(_vm._s(food.description.substring(0, 90)))
+                      ]),
                       _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-danger btn-sm",
-                          on: {
-                            click: function($event) {
-                              _vm.deleteFood(food.id)
+                      _c("td", { attrs: { nowrap: "" } }, [
+                        _vm._v("$" + _vm._s(_vm.convertMoney(food.price)))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { attrs: { nowrap: "" } }, [
+                        _c("button", { staticClass: "btn btn-info btn-sm" }, [
+                          _vm._v("Ver")
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-warning btn-sm",
+                            on: {
+                              click: function($event) {
+                                _vm.editFood(food.id)
+                              }
                             }
-                          }
-                        },
-                        [_vm._v("Eliminar")]
-                      )
+                          },
+                          [_vm._v("Editar")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger btn-sm",
+                            on: {
+                              click: function($event) {
+                                _vm.deleteFood(food.id)
+                              }
+                            }
+                          },
+                          [_vm._v("Eliminar")]
+                        )
+                      ])
                     ])
-                  ])
-                })
-              )
+                  })
+                )
+              ])
             ])
           ])
         ])
@@ -68781,6 +68799,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_format_num___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_format_num__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_moment__);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -69346,7 +69370,6 @@ var render = function() {
                 _c(
                   "form",
                   {
-                    staticClass: "form-inline",
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
@@ -69355,8 +69378,8 @@ var render = function() {
                     }
                   },
                   [
-                    _c("div", { staticClass: "form-row align-items-center" }, [
-                      _c("div", { staticClass: "col-auto" }, [
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-lg-3 col-md-4 col-sm-6" }, [
                         _c("input", {
                           directives: [
                             {
@@ -69384,7 +69407,7 @@ var render = function() {
                         })
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "col-auto" }, [
+                      _c("div", { staticClass: "col-lg-3 col-md-4 col-sm-6" }, [
                         _c("input", {
                           directives: [
                             {
@@ -69410,10 +69433,10 @@ var render = function() {
                             }
                           }
                         })
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _vm._m(0)
+                      ]),
+                      _vm._v(" "),
+                      _vm._m(0)
+                    ])
                   ]
                 )
               ])
@@ -69468,53 +69491,55 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("div", { staticClass: "card-body" }, [
-                            _c(
-                              "table",
-                              { staticClass: "table table-hover table-sm" },
-                              [
-                                _vm._m(1),
-                                _vm._v(" "),
-                                _c(
-                                  "tbody",
-                                  _vm._l(_vm.sales, function(sale) {
-                                    return _c(
-                                      "tr",
-                                      {
-                                        on: {
-                                          click: function($event) {
-                                            _vm.showDetailsSale(sale.id)
+                            _c("div", { staticClass: "table-responsive" }, [
+                              _c(
+                                "table",
+                                { staticClass: "table table-hover table-sm" },
+                                [
+                                  _vm._m(1),
+                                  _vm._v(" "),
+                                  _c(
+                                    "tbody",
+                                    _vm._l(_vm.sales, function(sale) {
+                                      return _c(
+                                        "tr",
+                                        {
+                                          on: {
+                                            click: function($event) {
+                                              _vm.showDetailsSale(sale.id)
+                                            }
                                           }
-                                        }
-                                      },
-                                      [
-                                        _c("td", [
-                                          _vm._v(
-                                            _vm._s(
-                                              _vm.convertDate(sale.created_at)
-                                            )
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(_vm._s(sale.table.name))
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "$" +
+                                        },
+                                        [
+                                          _c("td", { attrs: { nowrap: "" } }, [
+                                            _vm._v(
                                               _vm._s(
-                                                _vm.convertToMoney(
-                                                  sale.pricetotal
-                                                )
+                                                _vm.convertDate(sale.created_at)
                                               )
-                                          )
-                                        ])
-                                      ]
-                                    )
-                                  })
-                                )
-                              ]
-                            ),
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", { attrs: { nowrap: "" } }, [
+                                            _vm._v(_vm._s(sale.table.name))
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", { attrs: { nowrap: "" } }, [
+                                            _vm._v(
+                                              "$" +
+                                                _vm._s(
+                                                  _vm.convertToMoney(
+                                                    sale.pricetotal
+                                                  )
+                                                )
+                                            )
+                                          ])
+                                        ]
+                                      )
+                                    })
+                                  )
+                                ]
+                              )
+                            ]),
                             _vm._v(" "),
                             _c(
                               "div",
@@ -69547,41 +69572,66 @@ var render = function() {
                                           { staticClass: "modal-body" },
                                           [
                                             _c(
-                                              "table",
+                                              "div",
                                               {
-                                                staticClass:
-                                                  "table table-hover table-sm"
+                                                staticClass: "table-responsive"
                                               },
                                               [
-                                                _vm._m(3),
-                                                _vm._v(" "),
                                                 _c(
-                                                  "tbody",
-                                                  _vm._l(
-                                                    _vm.saleDetails,
-                                                    function(detail) {
-                                                      return _c("tr", [
-                                                        _c("td", [
-                                                          _vm._v(
-                                                            _vm._s(
-                                                              detail.food.name
-                                                            )
-                                                          )
-                                                        ]),
-                                                        _vm._v(" "),
-                                                        _c("td", [
-                                                          _vm._v(
-                                                            "$" +
-                                                              _vm._s(
-                                                                _vm.convertToMoney(
-                                                                  detail.foodprice
+                                                  "table",
+                                                  {
+                                                    staticClass:
+                                                      "table table-hover table-sm"
+                                                  },
+                                                  [
+                                                    _vm._m(3),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "tbody",
+                                                      _vm._l(
+                                                        _vm.saleDetails,
+                                                        function(detail) {
+                                                          return _c("tr", [
+                                                            _c(
+                                                              "td",
+                                                              {
+                                                                attrs: {
+                                                                  nowrap: ""
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  _vm._s(
+                                                                    detail.food
+                                                                      .name
+                                                                  )
                                                                 )
-                                                              )
-                                                          )
-                                                        ])
-                                                      ])
-                                                    }
-                                                  )
+                                                              ]
+                                                            ),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "td",
+                                                              {
+                                                                attrs: {
+                                                                  nowrap: ""
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "$" +
+                                                                    _vm._s(
+                                                                      _vm.convertToMoney(
+                                                                        detail.foodprice
+                                                                      )
+                                                                    )
+                                                                )
+                                                              ]
+                                                            )
+                                                          ])
+                                                        }
+                                                      )
+                                                    )
+                                                  ]
                                                 )
                                               ]
                                             )
@@ -69694,37 +69744,45 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "card-body" }, [
-                          _c(
-                            "table",
-                            { staticClass: "table table-hover table-sm" },
-                            [
-                              _vm._m(5),
-                              _vm._v(" "),
-                              _c(
-                                "tbody",
-                                _vm._l(_vm.expends, function(expend) {
-                                  return _c("tr", [
-                                    _c("td", [
-                                      _vm._v(
-                                        _vm._s(
-                                          _vm.convertDateForExpends(expend.date)
+                          _c("div", { staticClass: "table-responsive" }, [
+                            _c(
+                              "table",
+                              { staticClass: "table table-hover table-sm" },
+                              [
+                                _vm._m(5),
+                                _vm._v(" "),
+                                _c(
+                                  "tbody",
+                                  _vm._l(_vm.expends, function(expend) {
+                                    return _c("tr", [
+                                      _c("td", { attrs: { nowrap: "" } }, [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.convertDateForExpends(
+                                              expend.date
+                                            )
+                                          )
                                         )
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(_vm._s(expend.detail))]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(
-                                        "$" +
-                                          _vm._s(_vm.convertToMoney(expend.val))
-                                      )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", { attrs: { nowrap: "" } }, [
+                                        _vm._v(_vm._s(expend.detail))
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          "$" +
+                                            _vm._s(
+                                              _vm.convertToMoney(expend.val)
+                                            )
+                                        )
+                                      ])
                                     ])
-                                  ])
-                                })
-                              )
-                            ]
-                          )
+                                  })
+                                )
+                              ]
+                            )
+                          ])
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "card-footer" }, [
@@ -69800,7 +69858,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-auto" }, [
+    return _c("div", { staticClass: "col-md-3" }, [
       _c(
         "button",
         { staticClass: "btn btn-primary mb-2", attrs: { type: "submit" } },

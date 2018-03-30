@@ -53,7 +53,7 @@
                         <!--Listado de comidas para escoger-->
                         <template v-if="!seeFoodFromListState">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Buscar" v-model="find" v-on:keyup="getFoods()">
+                                <input type="text" class="form-control" placeholder="Buscar" v-model="find" v-on:keyup.enter="getFoods()">
                             </div>
                             <div id="div2">
                                 <table class="table table-hover table-sm">

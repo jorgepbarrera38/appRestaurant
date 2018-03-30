@@ -24,26 +24,28 @@
                                 <button type="submit" class="btn btn-primary mb-2">Buscar</button>
                             </div>
                         </form>
-                        <table class="table table-hover table-sm">
-                            <thead>
-                                <th>Nombre</th>
-                                <th>Descripción</th>
-                                <th>Precio</th>
-                                <th>#</th>
-                            </thead>
-                            <tbody>
-                                <tr v-for="food in foods">
-                                    <td>{{ food.name }}</td>
-                                    <td>{{ food.description.substring(0, 90) }}</td>
-                                    <td>${{ convertMoney(food.price) }}</td>
-                                    <td>
-                                        <button class="btn btn-info btn-sm">Ver</button>
-                                        <button class="btn btn-warning btn-sm" v-on:click="editFood(food.id)">Editar</button>
-                                        <button class="btn btn-danger btn-sm" v-on:click="deleteFood(food.id)">Eliminar</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm">
+                                <thead>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Precio</th>
+                                    <th>#</th>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="food in foods">
+                                        <td nowrap>{{ food.name }}</td>
+                                        <td nowrap>{{ food.description.substring(0, 90) }}</td>
+                                        <td nowrap>${{ convertMoney(food.price) }}</td>
+                                        <td nowrap>
+                                            <button class="btn btn-info btn-sm">Ver</button>
+                                            <button class="btn btn-warning btn-sm" v-on:click="editFood(food.id)">Editar</button>
+                                            <button class="btn btn-danger btn-sm" v-on:click="deleteFood(food.id)">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

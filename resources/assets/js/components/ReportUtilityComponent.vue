@@ -9,17 +9,17 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <form class="form-inline" v-on:submit.prevent="find()">
-                                    <div class="form-row align-items-center">
-                                        <div class="col-auto">
+                                <form v-on:submit.prevent="find()">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 col-sm-6">
                                             <input type="date" name="bdaytime" v-model="dateFrom" class="form-control mb-2" id="inlineFormInput">
                                         </div>
-                                        <div class="col-auto">
+                                        <div class="col-lg-3 col-md-4 col-sm-6">
                                             <input type="date" name="bdaytime" v-model="dateTo" class="form-control mb-2" id="inlineFormInput">
                                         </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <button class="btn btn-primary mb-2" type="submit">Buscar</button>
+                                        <div class="col-md-3">
+                                            <button class="btn btn-primary mb-2" type="submit">Buscar</button>
+                                        </div>
                                     </div>
                                 </form>
                                 
@@ -47,20 +47,22 @@
                                             </div>
                                             </div>
                                         <div class="card-body">
-                                            <table class="table table-hover table-sm">
-                                                <thead>
-                                                    <th>Fecha</th>
-                                                    <th>Mesa</th>
-                                                    <th>Venta</th>
-                                                </thead>
-                                                <tbody>
-                                                    <tr v-for="sale in sales" v-on:click="showDetailsSale(sale.id)">
-                                                        <td>{{ convertDate(sale.created_at) }}</td>
-                                                        <td>{{ sale.table.name }}</td>
-                                                        <td>${{ convertToMoney(sale.pricetotal) }}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                            <div class="table-responsive">
+                                                <table class="table table-hover table-sm">
+                                                    <thead>
+                                                        <th>Fecha</th>
+                                                        <th>Mesa</th>
+                                                        <th>Venta</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="sale in sales" v-on:click="showDetailsSale(sale.id)">
+                                                            <td nowrap>{{ convertDate(sale.created_at) }}</td>
+                                                            <td nowrap>{{ sale.table.name }}</td>
+                                                            <td nowrap>${{ convertToMoney(sale.pricetotal) }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                             <!--Modal DetailsSale-->
                                             <div class="modal fade" id="modalSaleDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
@@ -72,18 +74,20 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <table class="table table-hover table-sm">
-                                                        <thead>
-                                                            <th>Comida</th>
-                                                            <th>Precio</th>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr v-for="detail in saleDetails">
-                                                                <td>{{ detail.food.name }}</td>
-                                                                <td>${{ convertToMoney(detail.foodprice) }}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover table-sm">
+                                                            <thead>
+                                                                <th>Comida</th>
+                                                                <th>Precio</th>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr v-for="detail in saleDetails">
+                                                                    <td nowrap>{{ detail.food.name }}</td>
+                                                                    <td nowrap>${{ convertToMoney(detail.foodprice) }}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -119,20 +123,22 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <table class="table table-hover table-sm">
-                                            <thead>
-                                                <th>Fecha</th>
-                                                <th>Detalle</th>
-                                                <th>Valor</th>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="expend in expends">
-                                                    <td>{{ convertDateForExpends(expend.date) }}</td>
-                                                    <td>{{ expend.detail }}</td>
-                                                    <td>${{ convertToMoney(expend.val) }}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-sm">
+                                                <thead>
+                                                    <th>Fecha</th>
+                                                    <th>Detalle</th>
+                                                    <th>Valor</th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="expend in expends">
+                                                        <td nowrap>{{ convertDateForExpends(expend.date) }}</td>
+                                                        <td nowrap>{{ expend.detail }}</td>
+                                                        <td>${{ convertToMoney(expend.val) }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                     <div class="card-footer">
                                         <div class="float-right">
