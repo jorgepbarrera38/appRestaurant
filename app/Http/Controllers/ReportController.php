@@ -87,9 +87,6 @@ class ReportController extends Controller
             'datefrom' =>'required',
             'dateto' =>'required'
         ]);
-        //Obteniendo los gastos
-        $date1 = new Carbon($request->input('datefrom'));
-        $date2 = new Carbon($request->input('dateto'));
         $total = 0;
         $expendsPriceTotal = Expend::where('date','>=',$request->input('datefrom'))->where('date', '<=', $request->input('dateto'))->get();
         foreach($expendsPriceTotal as $expend){
@@ -97,6 +94,9 @@ class ReportController extends Controller
         }
         $expends = Expend::where('date','>=',$request->input('datefrom'))->where('date', '<=', $request->input('dateto'))->paginate(8);
         return response()->json(['expends'=>$expends, 'total'=>$total], 200);
+    }
+    public function foodmostsold(Request $request){
+        return $request;
     }
 
     /**

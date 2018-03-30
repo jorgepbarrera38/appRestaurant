@@ -12,6 +12,7 @@ import VueRouter from 'vue-router';
 import SaleComponent from './components/SaleComponent';
 import FoodComponent from './components/FoodComponent';
 import ReportUtilityComponent from './components/ReportUtilityComponent';
+import ReportMostSoldComponent from './components/ReportMostSoldComponent';
 import ExpendComponent from './components/ExpendComponent';
 import CompanyComponent from './components/CompanyComponent';
 
@@ -22,6 +23,7 @@ const routes = [
     { path: '/sales', name: 'sales', component: SaleComponent },
     { path: '/foods', name:'foods', component: FoodComponent },
     { path: '/reports/utility', name: 'reports.utility', component: ReportUtilityComponent },
+    { path: '/reports/mostsold', name: 'reports.mostsold', component:  ReportMostSoldComponent},
     { path: '/expends', name: 'expends', component: ExpendComponent },
     { path: '/company', name: 'company', component: CompanyComponent }
 ];

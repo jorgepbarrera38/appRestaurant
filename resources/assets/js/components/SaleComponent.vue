@@ -31,6 +31,7 @@
                     <div class="card-footer">
                         <button class="btn btn-default btn-sm" v-if="table.state" v-on:click="assignTable(table.id, index)">Asignar mesa</button>
                         <button type="button" class="btn btn-info btn-sm" v-if="!table.state" v-on:click="showModalFoods(table.id)">Realizar pedido</button>
+                        <button class="btn btn-default btn-sm" v-if="table.foodtabletemps.length>0">Imp</button>
                         <button type="button" class="btn btn-success btn-sm" v-if="table.foodtabletemps.length>0" v-on:click="pay(table.id, index)">Pagar</button>
                         <!--<button class="btn btn-danger btn-sm" v-if="!table.state">Cancelar pedido</button>-->
                         <!--Total del pepido-->

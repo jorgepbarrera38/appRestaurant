@@ -25,7 +25,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <router-link class="dropdown-item" :to="{ name: 'reports.utility' }"><span v-on:click="ocultar()">Reportes de utilidad</span></router-link>
-                            <router-link class="dropdown-item" :to="{ name: 'reports.utility' }"><span v-on:click="ocultar()">Los más vendidos</span></router-link>
+                            <router-link class="dropdown-item" :to="{ name: 'reports.mostsold' }"><span v-on:click="ocultar()">Reportes de lo más vendido</span></router-link>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Something else here</a>
                         </div>
