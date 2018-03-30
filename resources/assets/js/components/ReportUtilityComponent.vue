@@ -36,7 +36,7 @@
                             <!--Listado de ventas-->
                             <div class="col-lg-6 col-md-12">
                                 <div class="alert alert-danger" v-if="showBlanckSales">
-                                    No hay ventas registrados.
+                                    No hay ventas registradas.
                                 </div>
                                     <div v-if="sales.length>0">
                                     <div class="card" style="height: 28rem;">

@@ -69459,7 +69459,7 @@ var render = function() {
                 _vm.showBlanckSales
                   ? _c("div", { staticClass: "alert alert-danger" }, [
                       _vm._v(
-                        "\n                                No hay ventas registrados.\n                            "
+                        "\n                                No hay ventas registradas.\n                            "
                       )
                     ])
                   : _vm._e(),
@@ -70322,19 +70322,6 @@ var render = function() {
                         _c(
                           "button",
                           {
-                            staticClass: "btn btn-primary",
-                            on: {
-                              click: function($event) {
-                                _vm.saveExpend()
-                              }
-                            }
-                          },
-                          [_vm._v("Guardar")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
                             staticClass: "btn btn-danger",
                             on: {
                               click: function($event) {
@@ -70343,6 +70330,19 @@ var render = function() {
                             }
                           },
                           [_vm._v("Cancelar")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            on: {
+                              click: function($event) {
+                                _vm.saveExpend()
+                              }
+                            }
+                          },
+                          [_vm._v("Guardar")]
                         )
                       ])
                     ])

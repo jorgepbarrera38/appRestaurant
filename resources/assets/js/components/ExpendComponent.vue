@@ -57,8 +57,8 @@
                                       </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-primary" v-on:click="saveExpend()">Guardar</button>
                                     <button class="btn btn-danger" v-on:click="cancelNewExpend()">Cancelar</button>
+                                    <button class="btn btn-primary" v-on:click="saveExpend()">Guardar</button>
                                 </div>
                                 </div>
                             </div>
