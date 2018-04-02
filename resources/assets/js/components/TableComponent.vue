@@ -1,7 +1,5 @@
 <template>
-  <div class="container">
-      <div class="row">
-          <div class="col-md-12">
+  <div>
               <div class="card">
                   <div class="card-header">Mesas
                       <div class="float-right">
@@ -21,16 +19,12 @@
                             </ul>
                   </div>
               </div>
-          </div>
           <!--Modal create Tables-->
             <div class="modal fade" id="ModalCreateTable" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLongTitle">Crear mesa</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
                         </div>
                         <div class="modal-body">
                             <form v-on:submit.prevent="addTable()"> 
@@ -45,13 +39,12 @@
                         </div>
                         <div class="modal-footer">
                             <button v-on:click="addTable()" class="btn btn-primary">Guardar</button>
-                            <button v-on:click="hideModalCreateTable()" class="btn btn-danger">Cancelar</button>
+                            <button v-on:click="hideModalCreateTable()" class="btn btn-danger">Cerrar</button>
                         </div>
                     </div>
                 </div>
             </div>
           <!--Fin Modal create Tables-->
-      </div>
   </div>
 </template>
 <script>
@@ -72,13 +65,13 @@
         methods:{
             getTables: function(){
                 axios.get('tables').then(response=>{
-                    this.tables = response.data;
+                    this.tables = response.data.data;
                 });
             },
             addTable: function(){
                 axios.post('tables', { name: this.table }).then(response=>{
                     this.getTables();
-                    this.hideModalCreateTable();
+                    this.cleanFieldsAndErrors();
                     toastr.success('Mesa agregada');
                 }).catch(errors=>{
                     this.errors = errors.response.data.errors;

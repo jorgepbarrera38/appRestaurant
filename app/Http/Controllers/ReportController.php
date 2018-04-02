@@ -79,7 +79,7 @@ class ReportController extends Controller
             $total += $sale->pricetotal;
         }
         //Consultando
-        $sales = Sale::with('table')->whereBetween('created_at' ,array($date1, $date2->addHours(23)->addMinutes(59)))->paginate(8);
+        $sales = Sale::with('table')->whereBetween('created_at' ,array($date1, $date2->addHours(23)->addMinutes(59)))->orderBy('created_at', 'DESC')->paginate(8);
         return response()->json(['sales'=>$sales, 'total'=>$total],200);
     }
     public function expends(Request $request){

@@ -84,4 +84,8 @@ class SaleController extends Controller
             $saledetail->save();
         }
     }
+    public function abortbuy($id){
+        $foodtabletemp = Foodtabletemp::where('table_id', $id)->delete();
+        $table = Table::findOrFail($id)->update(['state'=>true]);
+    }
 }

@@ -30,7 +30,8 @@
                     </div>
                     <div class="card-footer">
                         <button class="btn btn-default btn-sm" v-if="table.state" v-on:click="assignTable(table.id, index)">Asignar mesa</button>
-                        <button type="button" class="btn btn-info btn-sm" v-if="!table.state" v-on:click="showModalFoods(table.id)">Realizar pedido</button>
+                        <button type="button" class="btn btn-info btn-sm" v-if="!table.state" style="width:30px" v-on:click="showModalFoods(table.id)">+</button>
+                        <button class="btn btn-danger btn-sm" v-on:click="abortBuy(table.id)" style="width:30px" v-if="!table.state">-</button>
                         <button class="btn btn-default btn-sm" v-if="table.foodtabletemps.length>0">Imp</button>
                         <button type="button" class="btn btn-success btn-sm" v-if="table.foodtabletemps.length>0" v-on:click="pay(table.id, index)">Pagar</button>
                         <!--<button class="btn btn-danger btn-sm" v-if="!table.state">Cancelar pedido</button>-->
@@ -59,17 +60,17 @@
                             <div id="div2">
                                 <table class="table table-hover table-sm">
                                     <thead>
-                                        <th>Nombre</th>
-                                        <th>Descripción</th>
-                                        <th>Precio</th>
                                         <th>#</th>
+                                        <th>Nombre</th>
+                                        <th>Precio</th>
+                                        <th>Descripción</th>
                                     </thead>
                                     <tbody>
                                         <tr v-for="food in foods">
-                                            <td>{{ food.name }}</td>
-                                            <td>{{ food.description }}</td>
+                                            <td><button class="btn btn-success btn-sm" v-on:click="addFoodTable(food.id, food.name, food.price)">+</button></td>
+                                            <td nowrap>{{ food.name }}</td>
                                             <td>${{ convertToMoney(food.price) }}</td>
-                                            <td><button class="btn btn-success btn-sm" v-on:click="addFoodTable(food.id, food.name, food.price)">Añadir</button></td>
+                                            <td nowrap>{{ food.description }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -99,7 +100,7 @@
                     <div class="modal-footer">
                         <button class="btn btn-success" v-if="foodtabletemps.length>0 && seeFoodFromListState" v-on:click="saveFoodsTemp()">Guardar pedido</button>
                         <button class="btn btn-primary" v-on:click="seeFoodFromListState ? seeFoodFromListState=false : seeFoodFromList()">
-                            {{ seeFoodFromListState ? 'Añadir más a la lista' : 'Ver pedido' }}
+                            {{ seeFoodFromListState ? 'Añadir más' : 'Ver pedido' }}
                         </button>
                         <button type="button" class="btn btn-secondary" v-on:click="closeModalFoods()">Cerrar</button>
                     </div>
@@ -219,7 +220,7 @@
             },
             addFoodTable: function(foodId, foodName, foodPrice){//ok
                 this.foodtabletemps.push({ id:foodId, name:foodName, price:foodPrice });
-                toastr.success('Comida añadida a la lista');
+                toastr.success('Comida añadida al pedido');
             },
             seeFoodFromList: function(){//ok
                 this.seeFoodFromListState = true;
@@ -299,6 +300,13 @@
                     this.payShowResult = true;
                     this.confirmPay = true;
                 }
+            },
+            abortBuy: function(tableId){
+                axios.put('sales/'+ tableId +'/abortbuy').then(response=>{
+                    this.getTables();
+                }).catch(errors=>{
+                    toastr.error('Algo salió mal :(');
+                });
             },
             convertToMoney(price){
                 return FormatNum(price);

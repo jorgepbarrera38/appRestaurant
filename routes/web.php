@@ -18,6 +18,7 @@ Route::resource('foods', 'FoodController');
 Route::delete('tables/{id}/delete', 'TableController@deletetable');
 Route::resource('tables', 'TableController');
 
+Route::put('sales/{id}/abortbuy', 'SaleController@abortbuy');
 Route::get('sales/gettables', 'SaleController@getTables');
 Route::get('sales/getfoods', 'SaleController@getfoods');
 Route::post('sales/paynow', 'SaleController@paynow');

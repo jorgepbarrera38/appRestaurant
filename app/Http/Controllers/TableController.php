@@ -14,7 +14,7 @@ class TableController extends Controller
      */
     public function index()
     {
-        $tables = Table::all();
+        $tables = Table::orderBy('name', 'ASC')->paginate(10);
         return $tables;        
     }
 
