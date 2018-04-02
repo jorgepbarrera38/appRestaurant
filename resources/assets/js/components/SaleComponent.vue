@@ -67,7 +67,7 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for="food in foods">
-                                            <td><button class="btn btn-success btn-sm" v-on:click="addFoodTable(food.id, food.name, food.price)">+</button></td>
+                                            <td><button class="btn btn-success btn-sm" style="width:30px" v-on:click="addFoodTable(food.id, food.name, food.price)">+</button></td>
                                             <td nowrap>{{ food.name }}</td>
                                             <td>${{ convertToMoney(food.price) }}</td>
                                             <td nowrap>{{ food.description }}</td>
@@ -304,6 +304,7 @@
             abortBuy: function(tableId){
                 axios.put('sales/'+ tableId +'/abortbuy').then(response=>{
                     this.getTables();
+                    toastr.success('Has cancelado el pedido');
                 }).catch(errors=>{
                     toastr.error('Algo salió mal :(');
                 });

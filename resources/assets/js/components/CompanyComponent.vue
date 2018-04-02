@@ -6,7 +6,7 @@
                   <div class="card-header">
                       Datos
                       <button v-if="!company" class="btn btn-success btn-sm float-right" v-on:click="showModalRegisterCompany()">Registrar datos</button>
-                      <button v-if="company" class="btn btn-success btn-sm float-right" v-on:click="showModalRegisterCompany()">Editar datos</button>
+                      <button v-else="company" class="btn btn-success btn-sm float-right" v-on:click="showModalRegisterCompany()">Editar datos</button>
                   </div>
                   <div class="card-body">
                       <ul class="list-group">

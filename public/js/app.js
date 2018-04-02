@@ -67355,6 +67355,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.put('sales/' + tableId + '/abortbuy').then(function (response) {
                 _this7.getTables();
+                __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.success('Has cancelado el pedido');
             }).catch(function (errors) {
                 __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.error('Algo salió mal :(');
             });
@@ -67684,6 +67685,7 @@ var render = function() {
                                             {
                                               staticClass:
                                                 "btn btn-success btn-sm",
+                                              staticStyle: { width: "30px" },
                                               on: {
                                                 click: function($event) {
                                                   _vm.addFoodTable(
@@ -71263,10 +71265,7 @@ var render = function() {
                   },
                   [_vm._v("Registrar datos")]
                 )
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.company
-              ? _c(
+              : _c(
                   "button",
                   {
                     staticClass: "btn btn-success btn-sm float-right",
@@ -71278,7 +71277,6 @@ var render = function() {
                   },
                   [_vm._v("Editar datos")]
                 )
-              : _vm._e()
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
