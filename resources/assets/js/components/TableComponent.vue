@@ -3,6 +3,8 @@
               <div class="card">
                   <div class="card-header">Mesas
                       <div class="float-right">
+                          <button class="btn btn-primary btn-sm" v-bind:class="pagination.currentPage == 1 ? 'disabled':''"  v-on:click="minPagination()">&lt</button>
+                          <button class="btn btn-primary btn-sm" v-bind:class="pagination.currentPage == pagination.lastPage ? 'disabled':''" v-on:click="uploadPagination()">&gt</button>
                           <button class="btn btn-success btn-sm" v-on:click="showModalCreateTable()">Agregar mesa</button>
                       </div>
                   </div>
@@ -60,12 +62,30 @@
                 addTableShowForm: false,
                 table:'',
                 errors: null,
+                pagination:{
+                    currentPage:1,
+                    lastPage:1
+                },
             }
         },
         methods:{
+            uploadPagination: function(){
+                if(this.pagination.currentPage < this.pagination.lastPage){
+                    this.pagination.currentPage+=1; 
+                    this.getTables();
+                }
+            },
+            minPagination: function(){
+                if(this.pagination.currentPage>1){
+                    this.pagination.currentPage-=1;
+                    this.getTables();
+                }
+            },
             getTables: function(){
-                axios.get('tables').then(response=>{
+                axios.get('tables?page='+this.pagination.currentPage).then(response=>{
                     this.tables = response.data.data;
+                    this.pagination.currentPage = response.data.current_page;
+                    this.pagination.lastPage = response.data.last_page;
                 });
             },
             addTable: function(){

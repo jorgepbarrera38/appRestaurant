@@ -7,8 +7,8 @@
                         Productos
                         <div class="float-right">
                             Página {{ currentPage }} de {{ lastPage }}
-                            <button class="btn btn-primary btn-sm" v-bind:class="buttonBackIsActive()" v-on:click="getFoods(currentPage-1)">Atrás</button>
-                            <button class="btn btn-primary btn-sm" v-bind:class="buttonUpIsActive()" v-on:click="getFoods(currentPage+1)">Adelante</button>
+                            <button class="btn btn-primary btn-sm" v-bind:class="buttonBackIsActive()" v-on:click="downPagination()">Atrás</button>
+                            <button class="btn btn-primary btn-sm" v-bind:class="buttonUpIsActive()" v-on:click="upPagination()">Adelante</button>
 
                             <a href="" class="btn btn-success btn-sm" v-on:click.prevent="newFood()">Nuevo</a>
                         </div>
@@ -35,7 +35,7 @@
                                         <td nowrap>{{ food.description.substring(0, 90) }}</td>
                                         <td nowrap>${{ convertMoney(food.price) }}</td>
                                         <td nowrap>
-                                            <button class="btn btn-info btn-sm">Ver</button>
+                                            <button class="btn btn-info btn-sm" v-on:click="showFood(food.id)">Ver</button>
                                             <button class="btn btn-warning btn-sm" v-on:click="editFood(food.id)">Editar</button>
                                             <button class="btn btn-danger btn-sm" v-on:click="deleteFood(food.id)">Eliminar</button>
                                         </td>
@@ -85,6 +85,35 @@
             </div>
         </div>
         <!-- End Modal create Food -->
+        <!--Modal show Food-->
+        <!-- Modal -->
+        <div class="modal fade" id="modalShowFood" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ver prodcto</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <strong>Nombre</strong>
+                        <p>{{ showFoodInfo.name }}</p>
+                    </div>
+                    <div class="form-group">
+                        <strong>Descripción</strong>
+                        <p>{{ showFoodInfo.description }}</p>
+                    </div>
+                    <div class="form-group">
+                        <strong>Precio</strong>
+                        <p>${{ convertMoney(showFoodInfo.price) }}</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        <!--End Modal Show Food-->
     </div>
 </template>
 <script>
@@ -108,19 +137,27 @@
                 currentPage : 1,
                 lastPage:1,
                 findTemp:'',
-                find:''
+                find:'',
+                showFoodInfo:{},
             }
         },
         methods:{
-            getFoods: function(nextPage=1){
-                var page = nextPage;
-                if(page<=this.lastPage){
-                    axios.get('foods?page='+page+'&name='+this.find).then(response=>{
+            upPagination: function(){
+                if(this.currentPage<this.lastPage){
+                    this.getFoods(this.currentPage+=1)
+                }
+            },
+            downPagination: function(){
+                if(this.currentPage > 1){
+                    this.getFoods(this.currentPage-=1)
+                }
+            },  
+            getFoods: function(){
+                    axios.get('foods?page='+this.currentPage+'&name='+this.find).then(response=>{
                     this.foods = response.data.data;
                     this.currentPage = response.data.current_page;
                     this.lastPage = response.data.last_page;
                 });
-                }
             },
             newFood: function(){
                 if(this.editFoodModal){
@@ -167,9 +204,12 @@
             deleteFood: function(foodId){
                 axios.delete('foods/'+foodId).then(response=>{
                     toastr.success('Comida eliminada');
+                    if(this.foods.length==1 && this.currentPage>1){
+                        this.currentPage-=1;
+                    }
                     this.getFoods();
                 }).catch(errors=>{
-                    toastr.danger('No se pudo eliminar la comida');
+                    toastr.error('No se pudo eliminar la comida, porque está asociada con una venta');
                 });
             },
             cleanFields: function(){
@@ -190,6 +230,12 @@
             addFind: function(){
                 this.find = this.findTemp;
                 this.getFoods();
+            },
+            showFood: function(foodId){
+                axios.get('foods/'+foodId).then(response=>{
+                    this.showFoodInfo =response.data;
+                    $('#modalShowFood').modal('show');
+                });
             }
         }
     }

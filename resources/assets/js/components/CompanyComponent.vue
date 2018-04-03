@@ -6,7 +6,7 @@
                   <div class="card-header">
                       Datos
                       <button v-if="!company" class="btn btn-success btn-sm float-right" v-on:click="showModalRegisterCompany()">Registrar datos</button>
-                      <button v-else="company" class="btn btn-success btn-sm float-right" v-on:click="showModalRegisterCompany()">Editar datos</button>
+                      <button v-else class="btn btn-success btn-sm float-right" v-on:click="showModalEditCompany()">Editar datos</button>
                   </div>
                   <div class="card-body">
                       <ul class="list-group">
@@ -40,7 +40,7 @@
                     <div class="alert alert-danger" v-if="errors">
                         <li v-for="error in errors">{{ error[0] }}</li>
                     </div>
-                    <form v-on:submit.prevent="">
+                    <form v-on:submit.prevent="saveCompany()">
                         <div class="form-group">
                             <label for="">Razón social</label>
                             <input type="text" class="form-control" v-model="newCompany.name">
@@ -68,6 +68,48 @@
             </div>
         </div>
         <!-- End Modal register company -->
+        <!--Modal edit comnpany-->
+        <div class="modal fade" id="modalEditCompany" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar datos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form v-on:submit.prevent="updateCompany()">
+                    <div class="alert alert-danger" v-if="errors">
+                        <li v-for="error in errors">{{ error[0]}}</li>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Razón social</label>
+                        <input type="text" class="form-control" v-model="newCompanyEdit.name">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Eslogan</label>
+                        <textarea rows="2"  v-model="newCompanyEdit.slogan" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Dirección</label>
+                        <input type="text" class="form-control" v-model="newCompanyEdit.address">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Teléfono</label>
+                        <input type="text" class="form-control" v-model="newCompanyEdit.phonenumber">
+                    </div>
+                    <button type="submit" style="display:none"></button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" v-on:click="updateCompany()">Guardar cambios</button>
+            </div>
+            </div>
+        </div>
+        </div>
+        <!--End Modal edit company-->
   </div>
 </template>
 <script>
@@ -85,6 +127,13 @@
                 company:[],
                 errors:null,
                 newCompany:{
+                    name:'',
+                    slogan:'',
+                    address:'',
+                    phonenumber:'',
+                },
+                newCompanyEdit:{
+                    id:'',
                     name:'',
                     slogan:'',
                     address:'',
@@ -121,8 +170,28 @@
                 }).catch(errors=>{
                     this.errors = errors.response.data.errors;
                 });
-            }           
+            },
+            showModalEditCompany: function(){
+                 this.errors = null;
+                this.newCompanyEdit.id = this.company.id;
+                this.newCompanyEdit.name = this.company.name;
+                this.newCompanyEdit.slogan = this.company.slogan;
+                this.newCompanyEdit.address = this.company.address;
+                this.newCompanyEdit.phonenumber = this.company.phonenumber;
+                $('#modalEditCompany').modal('show');
+            },
+            updateCompany: function(){
+                var companyId = this.newCompanyEdit.id;
+                axios.put('company/'+companyId, this.newCompanyEdit).then(response=>{
+                    this.getCompany();
+                    $('#modalEditCompany').modal('hide');
+                    toastr.success('Datos actualizados exitosamente');
+                }).catch(errors=>{
+                    this.errors = errors.response.data.errors;
+                });
+            }
         }
     }
 </script>
+
 

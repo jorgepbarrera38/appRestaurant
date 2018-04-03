@@ -76,7 +76,18 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|max:50',
+            'slogan' => 'required|max:100',
+            'address' => 'required|max:50',
+            'phonenumber' => 'required|max:50'
+        ],[],[
+            'name' => 'Razón social',
+            'slogan' => 'Eslogan',
+            'address' => 'Dirección',
+            'phonenumber' => 'Teléfono(s)'
+        ]);
+        Company::findOrFail($request->input('id'))->update($data);
     }
 
     /**
