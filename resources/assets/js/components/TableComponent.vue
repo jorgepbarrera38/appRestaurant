@@ -3,8 +3,10 @@
               <div class="card">
                   <div class="card-header">Mesas
                       <div class="float-right">
-                          <button class="btn btn-primary btn-sm" v-bind:class="pagination.currentPage == 1 ? 'disabled':''"  v-on:click="minPagination()">&lt</button>
-                          <button class="btn btn-primary btn-sm" v-bind:class="pagination.currentPage == pagination.lastPage ? 'disabled':''" v-on:click="uploadPagination()">&gt</button>
+                          <template v-if="tables.length>0">
+                              <button class="btn btn-primary btn-sm" v-bind:class="pagination.currentPage == 1 ? 'disabled':''"  v-on:click="minPagination()">&lt</button>
+                              <button class="btn btn-primary btn-sm" v-bind:class="pagination.currentPage == pagination.lastPage ? 'disabled':''" v-on:click="uploadPagination()">&gt</button>
+                          </template>
                           <button class="btn btn-success btn-sm" v-on:click="showModalCreateTable()">Agregar mesa</button>
                       </div>
                   </div>

@@ -6,9 +6,11 @@
                     <div class="card-header">
                         Productos
                         <div class="float-right">
-                            Página {{ currentPage }} de {{ lastPage }}
-                            <button class="btn btn-primary btn-sm" v-bind:class="buttonBackIsActive()" v-on:click="downPagination()">Atrás</button>
-                            <button class="btn btn-primary btn-sm" v-bind:class="buttonUpIsActive()" v-on:click="upPagination()">Adelante</button>
+                            <template v-if="foods.length>0">
+                                Página {{ currentPage }} de {{ lastPage }}
+                                <button class="btn btn-primary btn-sm" v-bind:class="buttonBackIsActive()" v-on:click="downPagination()">Atrás</button>
+                                <button class="btn btn-primary btn-sm" v-bind:class="buttonUpIsActive()" v-on:click="upPagination()">Adelante</button>
+                            </template>
 
                             <a href="" class="btn btn-success btn-sm" v-on:click.prevent="newFood()">Nuevo</a>
                         </div>

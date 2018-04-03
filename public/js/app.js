@@ -68269,6 +68269,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -68420,57 +68422,66 @@ var render = function() {
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header" }, [
             _vm._v("\n                    Productos\n                    "),
-            _c("div", { staticClass: "float-right" }, [
-              _vm._v(
-                "\n                        Página " +
-                  _vm._s(_vm.currentPage) +
-                  " de " +
-                  _vm._s(_vm.lastPage) +
-                  "\n                        "
-              ),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary btn-sm",
-                  class: _vm.buttonBackIsActive(),
-                  on: {
-                    click: function($event) {
-                      _vm.downPagination()
+            _c(
+              "div",
+              { staticClass: "float-right" },
+              [
+                _vm.foods.length > 0
+                  ? [
+                      _vm._v(
+                        "\n                            Página " +
+                          _vm._s(_vm.currentPage) +
+                          " de " +
+                          _vm._s(_vm.lastPage) +
+                          "\n                            "
+                      ),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary btn-sm",
+                          class: _vm.buttonBackIsActive(),
+                          on: {
+                            click: function($event) {
+                              _vm.downPagination()
+                            }
+                          }
+                        },
+                        [_vm._v("Atrás")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary btn-sm",
+                          class: _vm.buttonUpIsActive(),
+                          on: {
+                            click: function($event) {
+                              _vm.upPagination()
+                            }
+                          }
+                        },
+                        [_vm._v("Adelante")]
+                      )
+                    ]
+                  : _vm._e(),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-success btn-sm",
+                    attrs: { href: "" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.newFood()
+                      }
                     }
-                  }
-                },
-                [_vm._v("Atrás")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary btn-sm",
-                  class: _vm.buttonUpIsActive(),
-                  on: {
-                    click: function($event) {
-                      _vm.upPagination()
-                    }
-                  }
-                },
-                [_vm._v("Adelante")]
-              ),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass: "btn btn-success btn-sm",
-                  attrs: { href: "" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.newFood()
-                    }
-                  }
-                },
-                [_vm._v("Nuevo")]
-              )
-            ])
+                  },
+                  [_vm._v("Nuevo")]
+                )
+              ],
+              2
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
@@ -71154,6 +71165,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.options.timeOut = 2000;
@@ -71254,51 +71267,60 @@ var render = function() {
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
         _vm._v("Mesas\n                    "),
-        _c("div", { staticClass: "float-right" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary btn-sm",
-              class: _vm.pagination.currentPage == 1 ? "disabled" : "",
-              on: {
-                click: function($event) {
-                  _vm.minPagination()
+        _c(
+          "div",
+          { staticClass: "float-right" },
+          [
+            _vm.tables.length > 0
+              ? [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary btn-sm",
+                      class: _vm.pagination.currentPage == 1 ? "disabled" : "",
+                      on: {
+                        click: function($event) {
+                          _vm.minPagination()
+                        }
+                      }
+                    },
+                    [_vm._v("<")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary btn-sm",
+                      class:
+                        _vm.pagination.currentPage == _vm.pagination.lastPage
+                          ? "disabled"
+                          : "",
+                      on: {
+                        click: function($event) {
+                          _vm.uploadPagination()
+                        }
+                      }
+                    },
+                    [_vm._v(">")]
+                  )
+                ]
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-success btn-sm",
+                on: {
+                  click: function($event) {
+                    _vm.showModalCreateTable()
+                  }
                 }
-              }
-            },
-            [_vm._v("<")]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary btn-sm",
-              class:
-                _vm.pagination.currentPage == _vm.pagination.lastPage
-                  ? "disabled"
-                  : "",
-              on: {
-                click: function($event) {
-                  _vm.uploadPagination()
-                }
-              }
-            },
-            [_vm._v(">")]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-success btn-sm",
-              on: {
-                click: function($event) {
-                  _vm.showModalCreateTable()
-                }
-              }
-            },
-            [_vm._v("Agregar mesa")]
-          )
-        ])
+              },
+              [_vm._v("Agregar mesa")]
+            )
+          ],
+          2
+        )
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
