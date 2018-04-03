@@ -172,7 +172,7 @@
                 });
             },
             showModalEditCompany: function(){
-                 this.errors = null;
+                this.errors = null;
                 this.newCompanyEdit.id = this.company.id;
                 this.newCompanyEdit.name = this.company.name;
                 this.newCompanyEdit.slogan = this.company.slogan;
