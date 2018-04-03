@@ -71223,6 +71223,9 @@ __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.options.timeOut = 2000;
             var _this3 = this;
 
             axios.delete('tables/' + tableId + '/delete').then(function (response) {
+                if (_this3.tables.length == 1 && _this3.pagination.currentPage > 1) {
+                    _this3.pagination.currentPage -= 1;
+                }
                 _this3.getTables();
                 __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.success('Mesa eliminada');
             }).catch(function (errors) {

@@ -111,6 +111,9 @@
             
             deleteTable: function(tableId){
                 axios.delete('tables/'+tableId+'/delete').then(response=>{
+                    if(this.tables.length==1 && this.pagination.currentPage>1){
+                        this.pagination.currentPage-=1;
+                    }
                     this.getTables();
                     toastr.success('Mesa eliminada');
                 }).catch(errors=>{
