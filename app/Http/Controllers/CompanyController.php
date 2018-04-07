@@ -41,6 +41,11 @@ class CompanyController extends Controller
             'slogan' => 'required',
             'address' => 'required',
             'phonenumber' => 'required',
+        ],[],[
+            'name' => 'Razón social',
+            'slogan' => 'Eslogan',
+            'address' => 'Dirección',
+            'phonenumber' => 'Teléfono(s)'
         ]);
         Company::create($data);
     }

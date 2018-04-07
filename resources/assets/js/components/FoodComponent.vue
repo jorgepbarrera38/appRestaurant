@@ -211,7 +211,7 @@
                     }
                     this.getFoods();
                 }).catch(errors=>{
-                    toastr.error('No se pudo eliminar la comida, porque está asociada con una venta');
+                    toastr.error('No se pudo eliminar el producto porque está asociado con una venta');
                 });
             },
             cleanFields: function(){
