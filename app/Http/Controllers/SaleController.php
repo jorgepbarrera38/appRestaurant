@@ -29,7 +29,8 @@ class SaleController extends Controller
        $foods = $request->input('foods');
        foreach($foods as $food){
             $foodtabletemp = new Foodtabletemp();
-            $foodtabletemp->food_id = $food;
+            $foodtabletemp->food_id = $food['foodId'];
+            $foodtabletemp->quantity = $food['foodQuantity'];
             $foodtabletemp->table_id = $table;
             $foodtabletemp->save();
        }

@@ -67192,6 +67192,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -67273,7 +67277,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //ok
             var foodsId = [];
             this.foodtabletemps.forEach(function (food) {
-                foodsId.push(food.id);
+                var quantity = document.getElementById('fieldQuantityFood' + food.id).value;
+                foodsId.push({ foodId: food.id, foodQuantity: quantity });
             });
             var data = { table: this.tableNow, foods: foodsId };
             axios.post('sales', data).then(function (response) {
@@ -67299,7 +67304,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         calculateTotalTable: function calculateTotalTable(index) {
             var total = 0;
             this.tables[index].foodtabletemps.forEach(function (element) {
-                total += Number(element.food.price);
+                total += Number(element.food.price) * element.quantity;
             });
             return this.convertToMoney(total);
         },
@@ -67472,6 +67477,19 @@ var render = function() {
                                 "$" +
                                   _vm._s(
                                     _vm.convertToMoney(foodTemp.food.price)
+                                  )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(foodTemp.quantity))]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                "$" +
+                                  _vm._s(
+                                    _vm.convertToMoney(
+                                      foodTemp.quantity * foodTemp.food.price
+                                    )
                                   )
                               )
                             ]),
@@ -67741,11 +67759,15 @@ var render = function() {
                                             index
                                           ) {
                                             return _c("tr", [
-                                              _c("td", [
-                                                _vm._v(
-                                                  _vm._s(foodSelected.name)
-                                                )
-                                              ]),
+                                              _c(
+                                                "td",
+                                                { attrs: { nowrap: "" } },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(foodSelected.name)
+                                                  )
+                                                ]
+                                              ),
                                               _vm._v(" "),
                                               _c("td", [
                                                 _vm._v(
@@ -67756,6 +67778,23 @@ var render = function() {
                                                       )
                                                     )
                                                 )
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _c("input", {
+                                                  staticClass: "form-control",
+                                                  staticStyle: {
+                                                    width: "60px",
+                                                    height: "25px"
+                                                  },
+                                                  attrs: {
+                                                    type: "number",
+                                                    id:
+                                                      "fieldQuantityFood" +
+                                                      foodSelected.id,
+                                                    value: "1"
+                                                  }
+                                                })
                                               ]),
                                               _vm._v(" "),
                                               _c("td", [
@@ -68058,6 +68097,8 @@ var staticRenderFns = [
       _c("th", [_vm._v("Nombre")]),
       _vm._v(" "),
       _c("th", [_vm._v("Precio")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Cantidad")]),
       _vm._v(" "),
       _c("th", [_vm._v("#")])
     ])

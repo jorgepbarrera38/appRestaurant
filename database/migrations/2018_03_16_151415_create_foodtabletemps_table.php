@@ -15,10 +15,11 @@ class CreateFoodtabletempsTable extends Migration
     {
         Schema::create('foodtabletemps', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('food_id')->unsigned();
-            $table->foreign('food_id')->references('id')->on('foods');
             $table->integer('table_id')->unsigned();
             $table->foreign('table_id')->references('id')->on('tables');
+            $table->integer('food_id')->unsigned();
+            $table->foreign('food_id')->references('id')->on('foods');
+            $table->string('quantity');
             $table->timestamps();
         });
     }

@@ -22,6 +22,8 @@
                                 <tr v-for="(foodTemp, index) in table.foodtabletemps">
                                     <td>{{ foodTemp.food.name }}</td>
                                     <td>${{ convertToMoney(foodTemp.food.price) }}</td>
+                                    <td>{{ foodTemp.quantity }}</td>
+                                    <td>${{ convertToMoney(foodTemp.quantity * foodTemp.food.price) }}</td>
                                     <td><button class="btn  btn-sm" v-on:click="deleteFoodFromTable(foodTemp.id)">Quitar</button></td>
                                 </tr>
                             </table>
@@ -45,63 +47,69 @@
             </div>
             <!--Fin Listado de mesas-->
             <!--Modal show foods-->
-            <div class="modal fade" id="modalFoods" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal fade  bd-example-modal-lg" id="modalFoods" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">{{ seeFoodFromListState ? 'Pedido' : 'Carta' }}</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">Carta</h5>
                     </div>
                     <div class="modal-body" id="modal-body">
-                        <!--Listado de comidas para escoger-->
-                        <template v-if="!seeFoodFromListState">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Buscar" v-model="find" v-on:keyup.enter="getFoods()">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!--Listado de comidas para escoger-->
+                                <template>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Buscar" v-model="find" v-on:keyup.enter="getFoods()">
+                                    </div>
+                                    <div id="div2">
+                                        <table class="table table-hover table-sm">
+                                            <thead>
+                                                <th>#</th>
+                                                <th>Nombre</th>
+                                                <th>Precio</th>
+                                                <th>Descripción</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="food in foods">
+                                                    <td><button class="btn btn-success btn-sm" style="width:30px" v-on:click="addFoodTable(food.id, food.name, food.price)">+</button></td>
+                                                    <td nowrap>{{ food.name }}</td>
+                                                    <td>${{ convertToMoney(food.price) }}</td>
+                                                    <td nowrap>{{ food.description }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </template>
                             </div>
-                            <div id="div2">
-                                <table class="table table-hover table-sm">
-                                    <thead>
-                                        <th>#</th>
-                                        <th>Nombre</th>
-                                        <th>Precio</th>
-                                        <th>Descripción</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="food in foods">
-                                            <td><button class="btn btn-success btn-sm" style="width:30px" v-on:click="addFoodTable(food.id, food.name, food.price)">+</button></td>
-                                            <td nowrap>{{ food.name }}</td>
-                                            <td>${{ convertToMoney(food.price) }}</td>
-                                            <td nowrap>{{ food.description }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="col-md-6">
+                                <!--Listado de comida escogida por el cliente-->
+                                <template>
+                                    <div id="div3" v-if="foodtabletemps.length>0">
+                                        <table class="table table-hover table-sm">
+                                            <thead>
+                                                <th>Nombre</th>
+                                                <th>Precio</th>
+                                                <th>Cantidad</th>
+                                                <th>#</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(foodSelected, index) in foodtabletemps">
+                                                    <td nowrap>{{ foodSelected.name }}</td>
+                                                    <td>${{ convertToMoney(foodSelected.price) }}</td>
+                                                    <td><input type="number" class="form-control" v-bind:id="'fieldQuantityFood'+foodSelected.id" value="1" style="width:60px;height:25px"></td>
+                                                    <td><button class="btn btn-danger btn-sm" v-on:click="deleteFoodTemp(index)">Eliminar</button></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <p v-else>No has añadido nada al pedido</p>
+                                </template>
                             </div>
-                        </template>
-                        <!--Listado de comida escogida por el cliente-->
-                        <template v-if="seeFoodFromListState">
-                            <div id="div3" v-if="foodtabletemps.length>0">
-                                <table class="table table-hover table-sm">
-                                    <thead>
-                                        <th>Nombre</th>
-                                        <th>Precio</th>
-                                        <th>#</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(foodSelected, index) in foodtabletemps">
-                                            <td>{{ foodSelected.name }}</td>
-                                            <td>${{ convertToMoney(foodSelected.price) }}</td>
-                                            <td><button class="btn btn-danger btn-sm" v-on:click="deleteFoodTemp(index)">Eliminar</button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <p v-else>No has añadido nada al pedido</p>
-                        </template>
+                        </div>
+                        
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-success" v-if="foodtabletemps.length>0 && seeFoodFromListState" v-on:click="saveFoodsTemp()">Guardar pedido</button>
-                        <button class="btn btn-primary" v-on:click="seeFoodFromListState ? seeFoodFromListState=false : seeFoodFromList()">
-                            {{ seeFoodFromListState ? 'Añadir más' : 'Ver pedido' }}
-                        </button>
+                        <button class="btn btn-success" v-if="foodtabletemps.length>0" v-on:click="saveFoodsTemp()">Guardar pedido</button>
                         <button type="button" class="btn btn-secondary" v-on:click="closeModalFoods()">Cerrar</button>
                     </div>
                     </div>
@@ -181,7 +189,6 @@
 
                 foodAdd:false,
                 foodtabletemps:[],
-                seeFoodFromListState:false,
                 tableNow:'',
             }
         },
@@ -215,16 +222,12 @@
             },
             closeModalFoods: function(){//ok
                 $('#modalFoods').modal('hide');
-                this.seeFoodFromListState = false;
                 this.foodtabletemps = [];
             },
             addFoodTable: function(foodId, foodName, foodPrice){//ok
                 this.foodtabletemps.push({ id:foodId, name:foodName, price:foodPrice });
                 toastr.success('Comida añadida al pedido');
-            },
-            seeFoodFromList: function(){//ok
-                this.seeFoodFromListState = true;
-            },  
+            }, 
             deleteFoodTemp: function(indice){//ok
                 this.foodtabletemps.splice(indice, 1);
                 toastr.success('Comida eliminada del pedido');
@@ -232,14 +235,14 @@
             saveFoodsTemp: function(){//ok
                 var foodsId = [];
                 this.foodtabletemps.forEach(food => {
-                    foodsId.push(food.id);
+                    var quantity = document.getElementById('fieldQuantityFood'+food.id).value;
+                    foodsId.push({foodId:food.id, foodQuantity:quantity});
                 });
                 var data = {table:this.tableNow, foods:foodsId};
                 axios.post('sales', data).then(response=>{
                     this.getTables();
                     $('#modalFoods').modal('hide');
                     toastr.success('El pedido ha sido realizado');
-                    this.seeFoodFromListState = false;
                     this.foodtabletemps = [];
                 });
             },
@@ -257,7 +260,7 @@
             calculateTotalTable: function(index){
                 var total = 0;
                 this.tables[index].foodtabletemps.forEach(element => {
-                    total += Number(element.food.price);
+                    total += Number(element.food.price)*element.quantity;
                 });
                 return this.convertToMoney(total);
             },
