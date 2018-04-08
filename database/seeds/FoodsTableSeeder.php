@@ -24,6 +24,11 @@ class FoodsTableSeeder extends Seeder
             'price' => 35000
         ]);
         Food::create([
+            'name' => 'Vino de Uva',
+            'description' => 'Vino con sabor a uva',
+            'price' => 30000
+        ]);
+        Food::create([
             'name' => 'Cangrejo',
             'description' => 'Ensalada de centolla & vadouvan caribeño, aguacate, masa soplada, dashi de cangrejo, perlas negras, mandarina & jengibre',
             'price' => 40000
@@ -32,6 +37,11 @@ class FoodsTableSeeder extends Seeder
             'name' => 'Ceviche laminado',
             'description' => 'Pesca del día, leche de tigre de corozo costeño, pepino comprimido, shio kombu,copoazú, humo de coco carbonizado',
             'price' => 35000
+        ]);
+        Food::create([
+            'name' => 'Agua',
+            'description' => 'Agua natural',
+            'price' => 3000
         ]);
         Food::create([
             'name' => 'Carimañola',
@@ -52,6 +62,11 @@ class FoodsTableSeeder extends Seeder
             'name' => 'Tacos coreanos',
             'description' => 'Lonjas de res marinadas al estilo coreano, selladas a la plancha, kimchi picante de repollo morado & zanahoria, peras asiáticas, cogollo asado, tortillas de cilantro & maíz',
             'price' => 27000
+        ]);
+        Food::create([
+            'name' => 'Bebida jugo natural',
+            'description' => 'Delicioso jugo natural en agua o leche de varios sabores',
+            'price' => 5000
         ]);
     }
 }

@@ -26,7 +26,7 @@ class ReportController extends Controller
         return $total->sortByDesc('cant');
         ///*/
         //Validando la data
-        $data = $request->validate([
+        /*$data = $request->validate([
             'datefrom' =>'required',
             'dateto' =>'required'
         ]);
@@ -62,7 +62,7 @@ class ReportController extends Controller
         $date1 = new Carbon($request->input('datefrom'));
         $date2 = new Carbon($request->input('dateto'));
         $expends = Expend::where('date','>=',$request->input('datefrom'))->where('date', '<=', $request->input('dateto'))->get();
-        return response()->json(['sales'=>$sales, 'expends'=>$expends]);
+        return response()->json(['sales'=>$sales, 'expends'=>$expends]);*/
     }
     public function sales(Request $request){
         $data = $request->validate([
