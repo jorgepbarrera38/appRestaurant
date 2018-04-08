@@ -20,6 +20,8 @@ class CreateSaledetailsTable extends Migration
             $table->integer('food_id')->unsigned();
             $table->foreign('food_id')->references('id')->on('foods');
             $table->string('foodprice');
+            $table->string('quantity');
+            $table->string('pricetotal');
             $table->timestamps();
         });
     }

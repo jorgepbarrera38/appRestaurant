@@ -67263,8 +67263,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         addFoodTable: function addFoodTable(foodId, foodName, foodPrice) {
             //ok
-            this.foodtabletemps.push({ id: foodId, name: foodName, price: foodPrice });
-            __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.success('Comida añadida al pedido');
+            var count = 0;
+            this.foodtabletemps.forEach(function (foodTemp) {
+                if (foodTemp.id == foodId) {
+                    count += 1;
+                }
+            });
+            if (count != 0) {
+                __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.error('Ya has agregado este producto');
+            } else {
+                this.foodtabletemps.push({ id: foodId, name: foodName, price: foodPrice });
+                __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.success('Comida añadida al pedido');
+            }
         },
         deleteFoodTemp: function deleteFoodTemp(indice) {
             //ok
@@ -69157,6 +69167,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -69824,6 +69838,40 @@ var render = function() {
                                                                     )
                                                                 )
                                                               ]
+                                                            ),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "td",
+                                                              {
+                                                                attrs: {
+                                                                  nowrap: ""
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  _vm._s(
+                                                                    detail.quantity
+                                                                  )
+                                                                )
+                                                              ]
+                                                            ),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "td",
+                                                              {
+                                                                attrs: {
+                                                                  nowrap: ""
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  _vm._s(
+                                                                    _vm.convertToMoney(
+                                                                      detail.pricetotal
+                                                                    )
+                                                                  )
+                                                                )
+                                                              ]
                                                             )
                                                           ])
                                                         }
@@ -70108,7 +70156,11 @@ var staticRenderFns = [
     return _c("thead", [
       _c("th", [_vm._v("Comida")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Precio")])
+      _c("th", [_vm._v("Precio")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Cantidad")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Total")])
     ])
   },
   function() {

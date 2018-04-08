@@ -79,11 +79,15 @@
                                                             <thead>
                                                                 <th>Comida</th>
                                                                 <th>Precio</th>
+                                                                <th>Cantidad</th>
+                                                                <th>Total</th>
                                                             </thead>
                                                             <tbody>
                                                                 <tr v-for="detail in saleDetails">
                                                                     <td nowrap>{{ detail.food.name }}</td>
                                                                     <td nowrap>${{ convertToMoney(detail.foodprice) }}</td>
+                                                                    <td nowrap>{{ detail.quantity }}</td>
+                                                                    <td nowrap>{{ convertToMoney(detail.pricetotal) }}</td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>

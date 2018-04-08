@@ -225,8 +225,18 @@
                 this.foodtabletemps = [];
             },
             addFoodTable: function(foodId, foodName, foodPrice){//ok
-                this.foodtabletemps.push({ id:foodId, name:foodName, price:foodPrice });
-                toastr.success('Comida añadida al pedido');
+                var count = 0;
+                this.foodtabletemps.forEach(foodTemp=>{
+                    if(foodTemp.id == foodId){
+                        count+=1;
+                    }
+                });
+                if(count!=0){
+                    toastr.error('Ya has agregado este producto');
+                }else{
+                    this.foodtabletemps.push({ id:foodId, name:foodName, price:foodPrice });
+                    toastr.success('Comida añadida al pedido');
+                }
             }, 
             deleteFoodTemp: function(indice){//ok
                 this.foodtabletemps.splice(indice, 1);

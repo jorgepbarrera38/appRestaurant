@@ -49,7 +49,7 @@ class SaleController extends Controller
         $foodsTempfromTable = Foodtabletemp::where('table_id', $request->input('tableId'))->with('food')->get();
         $prices=0;
         foreach ($foodsTempfromTable as $food) {
-            $prices += $food->food->price;
+            $prices += $food->food->price*$food->quantity;
         }
         return $prices;
     }
@@ -69,7 +69,7 @@ class SaleController extends Controller
         //Obteniendo el precio total
         $priceTotal = 0;
         foreach ($foodsTempInTable as $food) {
-            $priceTotal += $food->food->price;
+            $priceTotal += $food->food->price*$food->quantity;
         }
         $sale = new Sale();
         $sale->table_id = $request->input('tableId');
@@ -82,6 +82,8 @@ class SaleController extends Controller
             $saledetail->sale_id = $sale->id;
             $saledetail->food_id = $foodTemp->food_id;
             $saledetail->foodprice = $foodTemp->food->price;
+            $saledetail->quantity = $foodTemp->quantity;
+            $saledetail->pricetotal = $foodTemp->food->price * $foodTemp->quantity;
             $saledetail->save();
         }
     }
