@@ -13,7 +13,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(FoodsTableSeeder::class);
         $this->call(TablesTableSeeder::class);
+        App\User::create([
+            'name' => 'admin',
+            'email' => 'admin@mail.com',
+            'password' => bcrypt('admin')
 
+        ]);
         //factory('App\Food', 50)->create();
 
         //factory('App\Sale', 10)->create();

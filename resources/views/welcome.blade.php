@@ -10,7 +10,7 @@
 </head>
 <body>
     <div id="app">
-        <navbar-component></navbar-component>
+        <navbar-component csrf="{{ csrf_token() }}" username="{{ Auth::user()->name }}"></navbar-component>
         <router-view></router-view>
     </div>
     <script src="{{ asset('js/app.js') }}"></script>

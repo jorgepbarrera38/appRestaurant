@@ -33,6 +33,18 @@
                     <li class="nav-item" :class="isActiveLink('/company')">
                         <router-link class="nav-link" :to="{ name: 'company' }"><span v-on:click="ocultar()">Empresa</span></router-link>
                     </li>
+                    <li class="nav-item dropdown" :class="isActiveLink('/reports/utility')">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Usuario
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a href="#" class="dropdown-item" onclick="getElementById('salir').submit()">Salir</a>
+                            <form action="/logout"  method="post" id="salir" style="display:none">
+                                <input type="hidden" name="_token" :value="csrf">
+                                <button type="submit">Salir</button>
+                            </form>
+                        </div>
+                    </li>
                 </ul>
             </div>  
             </nav>
@@ -41,6 +53,7 @@
 </template>
 <script>
     export default {
+        props:['csrf', 'username'],
         methods:{
             isActiveLink(url){
                 return url == this.$route.path ? 'active':'';
