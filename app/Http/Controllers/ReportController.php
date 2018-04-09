@@ -96,7 +96,25 @@ class ReportController extends Controller
         return response()->json(['expends'=>$expends, 'total'=>$total], 200);
     }
     public function foodmostsold(Request $request){
-        return $request;
+        $dateFrom = new Carbon($request->input('datefrom'));
+        $dateTo = new Carbon($request->input('dateto'));
+        $dateTo->addHours(23)->addMinutes(59)->addSeconds(59);
+
+        $saleDetail = Saledetail::with('food')->whereBetWeen('created_at', [$dateFrom, $dateTo])->get();
+        $foodsGroup = $saleDetail->groupBy('food_id');  
+        $foodsQuantity = [];
+        foreach($foodsGroup as $foodGroup){
+            $quantityFood = 0;
+            $foodId;
+            $foodName;
+            foreach($foodGroup as $food){
+                $quantityFood+=$food->quantity;
+                $foodId = $food->food_id;
+                $foodName = $food->food->name;
+            }
+            array_push($foodsQuantity, ['food_id'=>$foodId,'food'=>$foodName, 'quantity'=>$quantityFood]);
+        }
+        return $foodsQuantity;
     }
 
     /**
