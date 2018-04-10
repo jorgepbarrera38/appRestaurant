@@ -68986,7 +68986,7 @@ exports = module.exports = __webpack_require__(180)(false);
 
 
 // module
-exports.push([module.i, "\n#div1 {\n     overflow-y:scroll;\n     height:100px;\n}\n#div2 {\n     overflow-y: scroll;\n     height: 270px;\n}\n#div3 {\n     overflow-y: scroll;\n     height: 323px;\n}\n#modal-body {\n     min-height:360px; \n     overflow-y: auto;\n}\n", ""]);
+exports.push([module.i, "\n#div1 {\n     overflow-y:scroll;\n     height:100px;\n}\n#div2 {\n     overflow-y: scroll;\n     height: 345px;\n}\n#div3 {\n     overflow-y: scroll;\n     height: 345px;\n}\n#modal-body {\n     min-height:360px; \n     overflow-y: auto;\n}\n", ""]);
 
 // exports
 
@@ -70045,10 +70045,6 @@ var render = function() {
                                                   _vm.convertToMoney(food.price)
                                                 )
                                             )
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("td", { attrs: { nowrap: "" } }, [
-                                            _vm._v(_vm._s(food.description))
                                           ])
                                         ])
                                       })
@@ -70066,6 +70062,9 @@ var render = function() {
                           { staticClass: "col-md-6" },
                           [
                             [
+                              _c("h5", [_vm._v("Pedido")]),
+                              _c("br"),
+                              _vm._v(" "),
                               _vm.foodtabletemps.length > 0
                                 ? _c("div", { attrs: { id: "div3" } }, [
                                     _c(
@@ -70396,7 +70395,7 @@ var staticRenderFns = [
       _c(
         "h5",
         { staticClass: "modal-title", attrs: { id: "exampleModalLongTitle" } },
-        [_vm._v("Carta")]
+        [_vm._v("Agregar pedido")]
       )
     ])
   },
@@ -70409,9 +70408,7 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", [_vm._v("Nombre")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Precio")]),
-      _vm._v(" "),
-      _c("th", [_vm._v("Descripción")])
+      _c("th", [_vm._v("Precio")])
     ])
   },
   function() {

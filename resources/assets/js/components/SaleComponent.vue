@@ -51,7 +51,7 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Carta</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">Agregar pedido</h5>
                     </div>
                     <div class="modal-body" id="modal-body">
                         <div class="row">
@@ -67,14 +67,13 @@
                                                 <th>#</th>
                                                 <th>Nombre</th>
                                                 <th>Precio</th>
-                                                <th>Descripción</th>
                                             </thead>
                                             <tbody>
                                                 <tr v-for="food in foods">
                                                     <td><button class="btn btn-success btn-sm" style="width:30px" v-on:click="addFoodTable(food.id, food.name, food.price)">+</button></td>
                                                     <td nowrap>{{ food.name }}</td>
                                                     <td>${{ convertToMoney(food.price) }}</td>
-                                                    <td nowrap>{{ food.description }}</td>
+                                                    <!--<td nowrap>{{ food.description }}</td>-->
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -84,6 +83,7 @@
                             <div class="col-md-6">
                                 <!--Listado de comida escogida por el cliente-->
                                 <template>
+                                    <h5>Pedido</h5><br>
                                     <div id="div3" v-if="foodtabletemps.length>0">
                                         <table class="table table-hover table-sm">
                                             <thead>
@@ -343,11 +343,11 @@
         }
         #div2 {
             overflow-y: scroll;
-            height: 270px;
+            height: 345px;
         }
         #div3 {
             overflow-y: scroll;
-            height: 323px;
+            height: 345px;
         }
         #modal-body {
             min-height:360px; 
