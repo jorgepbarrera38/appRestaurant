@@ -18,7 +18,7 @@ class SaleController extends Controller
     }
     public function getfoods(Request $request){
         $nameFind = $request['name'];
-        return Food::name($nameFind)->paginate(8);
+        return Food::name($nameFind)->get();
     }
     public function store(Request $request){
        $request->validate([

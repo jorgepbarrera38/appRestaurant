@@ -1,9 +1,9 @@
 <template>
   <div>
-              <div class="card">
+              <div class="card" id="card">
                   <div class="card-header">Mesas
                       <div class="float-right">
-                          <template v-if="tables.length>0">
+                          <template v-show="tables.length>0">
                               <button class="btn btn-primary btn-sm" v-bind:class="pagination.currentPage == 1 ? 'disabled':''"  v-on:click="minPagination()">&lt</button>
                               <button class="btn btn-primary btn-sm" v-bind:class="pagination.currentPage == pagination.lastPage ? 'disabled':''" v-on:click="uploadPagination()">&gt</button>
                           </template>
@@ -11,16 +11,24 @@
                       </div>
                   </div>
                   <div class="card-body">
-                            <ul class="list-group">
-                                <a class="list-group-item list-group-item-action" v-for="table in tables">
-                                    {{ table.name }}
-                                    <div class="float-right">
-                                        <button class="btn btn-warning btn-sm" v-on:click="desactivateTable(table.id)" v-if="table.active">Inhabilitar</button>
-                                        <button class="btn btn-primary btn-sm" v-else v-on:click="desactivateTable(table.id)">Habilitar</button>
-                                        <button class="btn btn-danger btn-sm" v-on:click="deleteTable(table.id)">Eliminar</button>
-                                    </div>
-                                </a>
-                            </ul>
+                        <table class="table table-sm table-hover" v-if="tables.length>0">
+                            <thead>
+                                <th>Nombre</th>
+                                <th>Acción</th>
+                            </thead>
+                            <tbody>
+                                <tr v-for="table in tables">
+                                    <td>{{ table.name }}</td>
+                                    <td>
+                                        <div class="float-right">
+                                            <button class="btn btn-warning btn-sm" v-on:click="desactivateTable(table.id)" v-if="table.active">Inhabilitar</button>
+                                            <button class="btn btn-primary btn-sm" v-else v-on:click="desactivateTable(table.id)">Habilitar</button>
+                                            <button class="btn btn-danger btn-sm" v-on:click="deleteTable(table.id)">Eliminar</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                   </div>
               </div>
           <!--Modal create Tables-->
@@ -55,12 +63,13 @@
     import toastr from 'toastr';
     toastr.options.timeOut = 2000; 
     export default {
-        mounted(){
+        name:'TableComponent',
+        created(){
             this.getTables();
         },
         data(){
             return {
-                tables:null,
+                tables:[],
                 addTableShowForm: false,
                 table:'',
                 errors: null,
@@ -130,4 +139,9 @@
         }
     }
 </script>
+<style>
+    #card{
+        height: 415px;
+    }
+</style>
 

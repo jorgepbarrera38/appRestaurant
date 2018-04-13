@@ -206,7 +206,7 @@
             },
             getFoods: function(){
                 axios.get('sales/getfoods?name='+this.find).then(response=>{
-                    this.foods = response.data.data;
+                    this.foods = response.data;
                 });
             },
             assignTable: function(tableId, index){

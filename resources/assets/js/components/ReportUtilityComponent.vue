@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="row">
+        <div class="row" v-if="user == 'administrador'">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
@@ -30,6 +30,11 @@
                                 <div class="alert alert-success">
                                     Cargando...
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row" v-if="sales.length>0 ||  expends.length>0">
+                            <div class="col-md-3">
+                                <strong>Ganancia: </strong>${{ convertToMoney(getUtility) }}
                             </div>
                         </div>
                         <div class="row">
@@ -160,6 +165,9 @@
                 </div>
             </div>
         </div>
+         <div class="alert alert-danger" v-else>
+            No tienes permisos.
+        </div>
     </div>
 </template>
 <script>
@@ -168,6 +176,7 @@
     import moment from 'moment';
     moment.locale('es');
     export default {
+        props:['user'],
         data(){
             return {
                 dateFrom :'',
@@ -188,7 +197,8 @@
                 paginationExpends:{
                     currentPage:'',
                     lastPage:''
-                }
+                },
+                utility:0
             }
         },
         methods: {
@@ -270,6 +280,11 @@
             },
             convertDateForExpends: function(value){
                 return moment(value).format('MMMM Do YYYY');
+            }
+        },
+        computed:{
+            getUtility: function(){
+                return this.saleTotal - this.expendTotal;
             }
         }
     }

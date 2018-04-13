@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="row">
+        <div class="row" v-if="user == 'administrador'">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
@@ -45,83 +45,91 @@
                                 </tbody>
                             </table>
                         </div>
+                                        <!-- Modal create Food -->
+                        <div class="modal fade" id="newFoodModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">{{ editFoodModal ? 'Editar comida' : 'Nuevo producto' }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="alert alert-danger" v-if="errors">
+                                        <li v-for="error in errors">{{ error[0] }}</li>
+                                    </div>
+                                    <form v-on:submit.prevent="editFoodModal ? updateFood(food.id) : saveFood()">
+                                        <div class="form-group">
+                                            <label for="">Nombre</label>
+                                            <input type="text" class="form-control" v-model="food.name" maxlength="50">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Descripción</label>
+                                            <textarea rows="2" v-model="food.description"  class="form-control" maxlength="150"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Precio</label>
+                                            <input type="number" class="form-control" v-model="food.price">
+                                        </div>
+                                        <button type="submit" style="display:none"></button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" v-on:click="cancelNewFood()">Cancelar</button>
+                                    <button type="button" class="btn btn-primary" v-on:click="editFoodModal ? updateFood(food.id) : saveFood()">Guardar</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Modal create Food -->
+                        <!--Modal show Food-->
+                        <!-- Modal -->
+                        <div class="modal fade" id="modalShowFood" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Ver prodcto</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <strong>Nombre</strong>
+                                        <p>{{ showFoodInfo.name }}</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <strong>Descripción</strong>
+                                        <p>{{ showFoodInfo.description }}</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <strong>Precio</strong>
+                                        <p>${{ convertMoney(showFoodInfo.price) }}</p>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--End Modal Show Food-->
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Modal create Food -->
-        <div class="modal fade" id="newFoodModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">{{ editFoodModal ? 'Editar comida' : 'Nuevo' }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-danger" v-if="errors">
-                        <li v-for="error in errors">{{ error[0] }}</li>
-                    </div>
-                    <form v-on:submit.prevent="editFoodModal ? updateFood(food.id) : saveFood()">
-                        <div class="form-group">
-                            <label for="">Nombre</label>
-                            <input type="text" class="form-control" v-model="food.name" maxlength="50">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Descripción</label>
-                            <textarea rows="2" v-model="food.description"  class="form-control" maxlength="150"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Precio</label>
-                            <input type="number" class="form-control" v-model="food.price">
-                        </div>
-                        <button type="submit" style="display:none"></button>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" v-on:click="cancelNewFood()">Cancelar</button>
-                    <button type="button" class="btn btn-primary" v-on:click="editFoodModal ? updateFood(food.id) : saveFood()">Guardar</button>
-                </div>
+        <div class="row" v-else>
+            <div class="col-md-12">
+                <div class="alert alert-danger">
+                    No tienes permisos
                 </div>
             </div>
         </div>
-        <!-- End Modal create Food -->
-        <!--Modal show Food-->
-        <!-- Modal -->
-        <div class="modal fade" id="modalShowFood" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ver prodcto</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <strong>Nombre</strong>
-                        <p>{{ showFoodInfo.name }}</p>
-                    </div>
-                    <div class="form-group">
-                        <strong>Descripción</strong>
-                        <p>{{ showFoodInfo.description }}</p>
-                    </div>
-                    <div class="form-group">
-                        <strong>Precio</strong>
-                        <p>${{ convertMoney(showFoodInfo.price) }}</p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
-                </div>
-            </div>
-        </div>
-        <!--End Modal Show Food-->
     </div>
 </template>
 <script>
     import toastr from 'toastr';
     import formatNum from 'format-num';
     export default {
+        props:['user'],
         created(){
             this.getFoods();
         },

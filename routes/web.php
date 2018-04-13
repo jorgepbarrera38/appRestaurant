@@ -10,11 +10,20 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::group(['middleware'=>'auth'], function () {     
+Route::group(['middleware'=>['auth']], function () {     
+    Route::group(['middleware'=>'verifyIsAdmin'], function(){
+        Route::resource('foods', 'FoodController');    
+        Route::resource('expends', 'ExpendController');
+        Route::get('reports/foodmostsold', 'ReportController@foodmostsold');
+        Route::get('reports/expends', 'ReportController@expends');
+        Route::get('reports/sales', 'ReportController@sales');
+        Route::resource('reports', 'ReportController');
+        Route::resource('company', 'CompanyController');
+        Route::delete('tables/{id}/delete', 'TableController@deletetable');
+        Route::resource('tables', 'TableController');
+        Route::resource('users', 'UsersController');
+    });
     Route::view('/', 'welcome');
-    Route::resource('foods', 'FoodController');
-    Route::delete('tables/{id}/delete', 'TableController@deletetable');
-    Route::resource('tables', 'TableController');
 
     Route::put('sales/{id}/abortbuy', 'SaleController@abortbuy');
     Route::get('sales/gettables', 'SaleController@getTables');
@@ -22,13 +31,6 @@ Route::group(['middleware'=>'auth'], function () {
     Route::post('sales/paynow', 'SaleController@paynow');
     Route::resource('sales', 'SaleController');
     Route::post('pay', 'SaleController@pay');
-    Route::get('reports/foodmostsold', 'ReportController@foodmostsold');
-    Route::get('reports/expends', 'ReportController@expends');
-    Route::get('reports/sales', 'ReportController@sales');
-    Route::resource('reports', 'ReportController');
-    Route::resource('expends', 'ExpendController');
-    Route::resource('company', 'CompanyController');
+    
 });
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

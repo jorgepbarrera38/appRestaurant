@@ -1,10 +1,10 @@
 <template>
     <div class="container">
-        <div class="row">
+        <div class="row" v-if="user == 'administrador'">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        Lo más vendido
+                        Reporte de lo más vendido
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -33,12 +33,16 @@
                 </div>
             </div>
         </div>
+         <div class="alert alert-danger" v-else>
+            No tienes permisos.
+        </div>
     </div>
 </template>
 <script>
     import toastr from 'toastr';
     import chartJs from 'chart.js';
     export default {
+        props:['user'],
         data(){
             return {
                 dateFrom:'',

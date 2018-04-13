@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-      <div class="row">
+      <div class="row" v-if="user == 'administrador'">
           <div class="col-md-12">
               <div class="card">
                     <div class="card-header">
@@ -70,6 +70,9 @@
               </div>
           </div>
       </div>
+      <div class="alert alert-danger" v-else>
+          No tienes permisos.
+      </div>
   </div>
 </template>
 <script>
@@ -77,6 +80,7 @@
   import formatNum from 'format-num';
   import moment from 'moment';
   export default {
+      props:['user'],
       mounted: function(){
         this.getExpends();
       },
@@ -95,8 +99,6 @@
         getExpends: function(){
           axios.get('expends').then(response=>{
             this.expends = response.data.data;
-          }).catch(errors=>{
-            toastr.error('Ha ocurrido un error al llamar los gastos');
           });
         }, 
         showModalNewExpend: function(){
