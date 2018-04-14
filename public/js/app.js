@@ -87583,57 +87583,43 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "card-body" }, [
-                _c(
-                  "ul",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.company,
-                        expression: "company"
-                      }
-                    ],
-                    staticClass: "list-group"
-                  },
-                  [
-                    _c("li", { staticClass: "list-group-item" }, [
-                      _c("strong", [_vm._v("Empresa:")]),
-                      _vm._v(
-                        " " +
-                          _vm._s(_vm.company.name) +
-                          "\n                      "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("li", { staticClass: "list-group-item" }, [
-                      _c("strong", [_vm._v("Eslogan:")]),
-                      _vm._v(
-                        " " +
-                          _vm._s(_vm.company.slogan) +
-                          "\n                      "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("li", { staticClass: "list-group-item" }, [
-                      _c("strong", [_vm._v("Dirección:")]),
-                      _vm._v(
-                        " " +
-                          _vm._s(_vm.company.address) +
-                          "\n                      "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("li", { staticClass: "list-group-item" }, [
-                      _c("strong", [_vm._v("Teléfono:")]),
-                      _vm._v(
-                        " " +
-                          _vm._s(_vm.company.phonenumber) +
-                          "\n                      "
-                      )
-                    ])
-                  ]
-                ),
+                _c("ul", { staticClass: "list-group" }, [
+                  _c("li", { staticClass: "list-group-item" }, [
+                    _c("strong", [_vm._v("Empresa:")]),
+                    _vm._v(
+                      " " +
+                        _vm._s(_vm.company.name) +
+                        "\n                      "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "list-group-item" }, [
+                    _c("strong", [_vm._v("Eslogan:")]),
+                    _vm._v(
+                      " " +
+                        _vm._s(_vm.company.slogan) +
+                        "\n                      "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "list-group-item" }, [
+                    _c("strong", [_vm._v("Dirección:")]),
+                    _vm._v(
+                      " " +
+                        _vm._s(_vm.company.address) +
+                        "\n                      "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "list-group-item" }, [
+                    _c("strong", [_vm._v("Teléfono:")]),
+                    _vm._v(
+                      " " +
+                        _vm._s(_vm.company.phonenumber) +
+                        "\n                      "
+                    )
+                  ])
+                ]),
                 _vm._v(" "),
                 _c(
                   "div",

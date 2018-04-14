@@ -9,7 +9,7 @@
                       <button v-else class="btn btn-success btn-sm float-right" v-on:click="showModalEditCompany()">Editar datos</button>
                   </div>
                   <div class="card-body">
-                      <ul class="list-group" v-show="company">
+                      <ul class="list-group">
                         <li class="list-group-item"><strong>Empresa:</strong> {{ company.name }}
                         </li>
                         <li class="list-group-item"><strong>Eslogan:</strong> {{ company.slogan }}
