@@ -1,7 +1,10 @@
 <template>
     <div>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Navbar</a>
+            <a class="navbar-brand" href="#">
+                <span v-if="company">{{ company }}</span>
+                <span v-else>App</span>
+            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -48,7 +51,7 @@
 </template>
 <script>
     export default {
-        props:['csrf', 'username', 'userrole', 'names'],
+        props:['csrf', 'username', 'userrole', 'names', 'company'],
         methods:{
             isActiveLink(url){
                 return url == this.$route.path ? 'active':'';

@@ -69587,7 +69587,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (count != 0) {
                 __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.error('Ya has agregado este producto');
             } else {
-                this.foodtabletemps.push({ id: foodId, name: foodName, price: foodPrice });
+                this.foodtabletemps.push({ id: foodId, name: foodName, quantity: 1, price: foodPrice });
                 __WEBPACK_IMPORTED_MODULE_0_toastr___default.a.success('Comida añadida al pedido');
             }
         },
@@ -70106,6 +70106,16 @@ var render = function() {
                                               _vm._v(" "),
                                               _c("td", [
                                                 _c("input", {
+                                                  directives: [
+                                                    {
+                                                      name: "model",
+                                                      rawName: "v-model",
+                                                      value:
+                                                        foodSelected.quantity,
+                                                      expression:
+                                                        "foodSelected.quantity"
+                                                    }
+                                                  ],
                                                   staticClass: "form-control",
                                                   staticStyle: {
                                                     width: "60px",
@@ -70115,8 +70125,24 @@ var render = function() {
                                                     type: "number",
                                                     id:
                                                       "fieldQuantityFood" +
-                                                      foodSelected.id,
-                                                    value: "1"
+                                                      foodSelected.id
+                                                  },
+                                                  domProps: {
+                                                    value: foodSelected.quantity
+                                                  },
+                                                  on: {
+                                                    input: function($event) {
+                                                      if (
+                                                        $event.target.composing
+                                                      ) {
+                                                        return
+                                                      }
+                                                      _vm.$set(
+                                                        foodSelected,
+                                                        "quantity",
+                                                        $event.target.value
+                                                      )
+                                                    }
                                                   }
                                                 })
                                               ]),
@@ -88251,9 +88277,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['csrf', 'username', 'userrole', 'names'],
+    props: ['csrf', 'username', 'userrole', 'names', 'company'],
     methods: {
         isActiveLink: function isActiveLink(url) {
             return url == this.$route.path ? 'active' : '';
@@ -88276,7 +88305,9 @@ var render = function() {
   return _c("div", [
     _c("nav", { staticClass: "navbar navbar-expand-lg navbar-dark bg-dark" }, [
       _c("a", { staticClass: "navbar-brand", attrs: { href: "#" } }, [
-        _vm._v("Navbar")
+        _vm.company
+          ? _c("span", [_vm._v(_vm._s(_vm.company))])
+          : _c("span", [_vm._v("App")])
       ]),
       _vm._v(" "),
       _vm._m(0),

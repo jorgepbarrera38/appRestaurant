@@ -23,7 +23,10 @@ Route::group(['middleware'=>['auth']], function () {
         Route::resource('tables', 'TableController');
         Route::resource('users', 'UsersController');
     });
-    Route::view('/', 'welcome');
+    Route::get('/', function(){
+        $company = \App\Company::first();
+        return view('welcome', compact('company'));
+    });
 
     Route::put('sales/{id}/abortbuy', 'SaleController@abortbuy');
     Route::get('sales/gettables', 'SaleController@getTables');

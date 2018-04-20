@@ -10,7 +10,7 @@
 </head>
 <body>
     <div id="app">
-    <navbar-component csrf="{{ csrf_token() }}" username="{{ Auth::user()->name }}" userrole="{{ Auth::user()->role }}" names="{{ Auth::user()->names }}"></navbar-component>
+    <navbar-component csrf="{{ csrf_token() }}" username="{{ Auth::user()->name }}" userrole="{{ Auth::user()->role }}" names="{{ Auth::user()->names }}" company="{{ isset($company->name) ? $company->name : ''  }}"></navbar-component>
         <router-view user="{{ Auth::user()->role }}"></router-view>
     </div>
     <script src="{{ asset('js/app.js') }}"></script>

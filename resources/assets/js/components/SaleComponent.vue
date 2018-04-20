@@ -96,7 +96,7 @@
                                                 <tr v-for="(foodSelected, index) in foodtabletemps">
                                                     <td nowrap>{{ foodSelected.name }}</td>
                                                     <td>${{ convertToMoney(foodSelected.price) }}</td>
-                                                    <td><input type="number" class="form-control" v-bind:id="'fieldQuantityFood'+foodSelected.id" value="1" style="width:60px;height:25px"></td>
+                                                    <td><input type="number" class="form-control" v-bind:id="'fieldQuantityFood'+foodSelected.id" v-model="foodSelected.quantity" style="width:60px;height:25px"></td>
                                                     <td><button class="btn btn-danger btn-sm" v-on:click="deleteFoodTemp(index)">Eliminar</button></td>
                                                 </tr>
                                             </tbody>
@@ -234,7 +234,7 @@
                 if(count!=0){
                     toastr.error('Ya has agregado este producto');
                 }else{
-                    this.foodtabletemps.push({ id:foodId, name:foodName, price:foodPrice });
+                    this.foodtabletemps.push({ id:foodId, name:foodName, quantity:1, price:foodPrice });
                     toastr.success('Comida añadida al pedido');
                 }
             }, 
