@@ -13,7 +13,7 @@ use App\Saledetail;
 class SaleController extends Controller
 {
     public function getTables(){
-        $tables = Table::with('foodtabletemps.food')->where('active', true)->orderBy('name')->get();
+        $tables = Table::with('foodtabletemps.food')->where('active', true)->orderBy('LENGTH(name)', 'ASC')->get();
         return $tables;
     }
     public function getfoods(Request $request){
